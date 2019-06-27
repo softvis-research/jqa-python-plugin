@@ -21,3 +21,12 @@ git clone https://github.com/buschmais/jqa-testng-plugin
 git clone https://github.com/buschmais/jqa-tycho-plugin
 git clone https://github.com/buschmais/jqa-xml-plugin
 git clone https://github.com/buschmais/jqa-yaml-plugin
+
+git clone https://github.com/softvis-research/jqa-javasrc-plugin
+git clone https://github.com/softvis-research/jqa-c-plugin
+git clone https://github.com/softvis-research/jqa-plsql-plugin
+git clone https://github.com/softvis-research/jqa-githubissues-plugin
+git clone https://github.com/softvis-research/jqa-kieker-plugin
+git clone https://github.com/softvis-research/jqa-dashboard
+
+git clone https://github.com/kev007/jqa-python-plugin

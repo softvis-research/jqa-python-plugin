@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.kev007.jqa</groupId>
-    <artifactId>jqa-python-plugin</artifactId>
+    <artifactId>python</artifactId>
     <version>1</version>
 
     <name>jQAssistant Python Plugin</name>
