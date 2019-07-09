@@ -1,4 +1,4 @@
-package com.kev007.jqa.plugin.python.api.model;
+package org.jqassistant.contrib.plugin.python.api.model;
 
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.xo.api.annotation.Abstract;

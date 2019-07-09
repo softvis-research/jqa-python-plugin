@@ -9,12 +9,39 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.kev007.jqa</groupId>
+    <groupId>org.jqassistant.contrib.plugin</groupId>
     <artifactId>python</artifactId>
-    <version>1</version>
+    <version>0.0.1</version>
 
     <name>jQAssistant Python Plugin</name>
-    <url>https://jqa.kev007.com/</url>
+    <description>A jQAssistant plugin to scan and to analyze Python source code.</description>
+    <url>http://jqassistant.org/</url>
+
+    <developers>
+        <developer>
+            <id>kev007</id>
+            <name>Kevin Shrestha</name>
+            <email>kev_shrestha@hotmail.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License, v3</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+    </licenses>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -44,8 +71,9 @@
         </dependency>
         <dependency>
             <groupId>com.buschmais.jqassistant.neo4jserver</groupId>
-            <artifactId>neo4jv3</artifactId>
-            <version>1.4.0</version>
+            <artifactId>parent</artifactId>
+            <type>test-jar</type>
+            <version>${jqa-neo4jbackend.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

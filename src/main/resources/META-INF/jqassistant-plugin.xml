@@ -1,0 +1,14 @@
+<jqa-plugin:jqassistant-plugin xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.1" name="XML">
+    <description>Provides scanners for Python 3 Source Code</description>
+    <model>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonFileDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonDescriptor</class>
+    </model>
+    <scope>
+        <class>org.jqassistant.contrib.plugin.python.api.scanner.PythonScope</class>
+    </scope>
+    <scanner> 
+        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceDirectoryScannerPlugin</class>
+        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceFileScannerPlugin</class>
+    </scanner>
+</jqa-plugin:jqassistant-plugin>
