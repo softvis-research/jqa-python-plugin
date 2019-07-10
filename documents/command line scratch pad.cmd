@@ -28,5 +28,9 @@ git clone https://github.com/softvis-research/jqa-plsql-plugin
 git clone https://github.com/softvis-research/jqa-githubissues-plugin
 git clone https://github.com/softvis-research/jqa-kieker-plugin
 git clone https://github.com/softvis-research/jqa-dashboard
+git clone https://github.com/softvis-research/jqa-jira-plugin
+git clone https://github.com/softvis-research/jqa-javascript-plugin
+git clone https://github.com/softvis-research/jqa-php-plugin
 
-git clone https://github.com/kev007/jqa-python-plugin
+git clone https://github.com/antlr/antlr4
+hg clone https://bitbucket.org/jython/jython
