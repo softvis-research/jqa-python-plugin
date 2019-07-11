@@ -53,9 +53,18 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>12</source>
+                    <target>12</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.4.0</version>
+                <version>1.4.2</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -65,7 +74,7 @@
                         <configuration>
                             <url>https://raw.githubusercontent.com/antlr/grammars-v4/master/python3/Python3.g4</url>
                             <outputFileName>Python3.g4</outputFileName>
-                            <outputDirectory>src/main/antlr4/org/jqassistant/contrib/plugin/python</outputDirectory>
+                            <outputDirectory>src/main/antlr4/org/jqassistant/contrib/plugin/python/antlr4</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -88,15 +97,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>12</source>
-                    <target>12</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -125,6 +125,11 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython-standalone</artifactId>
+            <version>2.7.1</version>
         </dependency>
 
         <dependency>

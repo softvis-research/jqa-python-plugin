@@ -3,34 +3,76 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.python.Python3Lexer;
-import org.jqassistant.contrib.plugin.python.Python3Parser;
-import org.jqassistant.contrib.plugin.python.Python3Parser.File_inputContext;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3BaseListener;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.impl.scanner.PythonFileScannerPlugin;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ANTLRTest {
-    @Test
-    public void testParse() throws IOException {
-        String examplePath = "/examples/http_server.py";
-//        String examplePath = "/examples/render.py";
-//        String examplePath = "/examples/simple.py";
 
-        InputStream inputStream = PythonFileScannerPlugin.class.getResourceAsStream(examplePath);
-        Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
-        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-        Python3Parser parser = new Python3Parser(tokenStream);
-        File_inputContext file_inputContext = parser.file_input();
+    private String exampleFilePath;
+    private File_inputContext file_inputContext;
+    private Python3Parser parser;
 
+    @Before
+    public void init() throws IOException {
+        System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
+        System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
         columnPrint("INT", "(depth...) Rule Name", "Python 3 Source Code", 0);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
-        indentPrint(file_inputContext, 0);
+
+        exampleFilePath = "/examples/http_server.py";
+//        exampleFilePath = "/examples/render.py";
+//        exampleFilePath = "/examples/simple.py";
+
+        InputStream inputStream = PythonFileScannerPlugin.class.getResourceAsStream(exampleFilePath);
+        Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        parser = new Python3Parser(tokenStream);
     }
 
-    private void indentPrint(RuleContext context, int indentDepth) {
+    @Test
+    public void testParse(){
+        file_inputContext = parser.file_input();
+
+        iteratePrettyPrint(file_inputContext, 0);
+    }
+
+    @Test
+    public void testWalker() {
+        ParseTreeWalker.DEFAULT.walk(new Python3BaseListener() {
+            @Override
+            public void enterEval_input(Python3Parser.Eval_inputContext ctx) {
+                columnPrint(Integer.toString(ctx.getRuleIndex()),
+                        Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.getText(),
+                        ctx.getText(),
+                        0);
+            }
+            @Override
+            public void enterTfpdef(Python3Parser.TfpdefContext ctx) {
+                columnPrint(Integer.toString(ctx.getRuleIndex()),
+                        Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.NAME().getText(),
+                        ctx.getText(),
+                        0);
+            }
+            @Override
+            public void enterFuncdef(Python3Parser.FuncdefContext ctx) {
+                columnPrint(Integer.toString(ctx.getRuleIndex()),
+                        Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.NAME().getText(),
+                        ctx.getText(),
+                        0);
+            }
+        }, parser.file_input());
+    }
+
+    private void iteratePrettyPrint(RuleContext context, int indentDepth) {
         boolean ignoringWrappers = true;
 
         boolean toBeIgnored = ignoringWrappers
@@ -39,16 +81,14 @@ public class ANTLRTest {
         if (!toBeIgnored) {
             final int ruleIndex = context.getRuleIndex();
             String ruleName = Python3Parser.ruleNames[ruleIndex];
-            String source = context.getText()
-                    .replace("\n", (ANSI_CYAN + "\\n" + ANSI_RESET))
-                    .replace("\r", (ANSI_CYAN + "\\r" + ANSI_RESET));
+            String source = context.getText();
 
             columnPrint(Integer.toString(ruleIndex), ruleName, source, indentDepth);
         }
         for (int i = 0; i < context.getChildCount(); i++) {
             ParseTree element = context.getChild(i);
             if (element instanceof RuleContext) {
-                indentPrint((RuleContext)element, indentDepth + (toBeIgnored ? 0 : 1));
+                iteratePrettyPrint((RuleContext)element, indentDepth + (toBeIgnored ? 0 : 1));
             }
         }
     }
@@ -67,6 +107,8 @@ public class ANTLRTest {
                 + ANSI_RED + "|" + ANSI_RESET
 //                + whitespace.repeat(indentDepth * indentSize)
                 + source
+                        .replace("\n", (ANSI_CYAN + "\\n" + ANSI_RESET))
+                        .replace("\r", (ANSI_CYAN + "\\r" + ANSI_RESET))
                 + ANSI_RED + "|" + ANSI_RESET
         );
     }

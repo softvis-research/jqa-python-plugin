@@ -1,1 +1,94 @@
 https://github.com/antlr/antlr4/blob/master/doc/java-target.md
+
+|INT|(depth...) Rule Name          |Python 3 Source Code|
+-----------------------------------------------------------------
+|  1|file_input                    |\r\nfromhttp.serverimportBaseHTTPRequestHandler,HTTPServer\r\nclasstestHTTPServer_RequestHandler(BaseHTTPRequestHandler):      defdo_GET(self):          self.send_response(200)  self.send_header('Content-type','text/html')  self.end_headers()  message="Hello world!"  self.wfile.write(bytes(message,"utf8"))  return\r\n\n\ndefrun():      print('starting server...')  server_address=('127.0.0.1',8081)  httpd=HTTPServer(server_address,testHTTPServer_RequestHandler)  print('running server...')  httpd.serve_forever()\r\n\nrun()\r\n<EOF>|
+| 14|  simple_stmt                 |fromhttp.serverimportBaseHTTPRequestHandler,HTTPServer\r\n|
+| 30|    import_from               |fromhttp.serverimportBaseHTTPRequestHandler,HTTPServer|
+| 35|      dotted_name             |http.server|
+| 33|      import_as_names         |BaseHTTPRequestHandler,HTTPServer|
+| 31|        import_as_name        |BaseHTTPRequestHandler|
+| 31|        import_as_name        |HTTPServer|
+| 77|  classdef                    |classtestHTTPServer_RequestHandler(BaseHTTPRequestHandler):      defdo_GET(self):          self.send_response(200)  self.send_header('Content-type','text/html')  self.end_headers()  message="Hello world!"  self.wfile.write(bytes(message,"utf8"))  return\r\n\n\n|
+| 68|    atom                      |BaseHTTPRequestHandler|
+| 48|    suite                     |      defdo_GET(self):          self.send_response(200)  self.send_header('Content-type','text/html')  self.end_headers()  message="Hello world!"  self.wfile.write(bytes(message,"utf8"))  return\r\n\n\n|
+|  7|      funcdef                 |defdo_GET(self):          self.send_response(200)  self.send_header('Content-type','text/html')  self.end_headers()  message="Hello world!"  self.wfile.write(bytes(message,"utf8"))  return\r\n\n|
+|  8|        parameters            |(self)|
+| 10|          tfpdef              |self|
+| 48|        suite                 |          self.send_response(200)  self.send_header('Content-type','text/html')  self.end_headers()  message="Hello world!"  self.wfile.write(bytes(message,"utf8"))  return\r\n\n|
+| 14|          simple_stmt         |self.send_response(200)  |
+| 67|            atom_expr         |self.send_response(200)|
+| 68|              atom            |self|
+| 70|              trailer         |.send_response|
+| 70|              trailer         |(200)|
+| 68|                atom          |200|
+| 14|          simple_stmt         |self.send_header('Content-type','text/html')  |
+| 67|            atom_expr         |self.send_header('Content-type','text/html')|
+| 68|              atom            |self|
+| 70|              trailer         |.send_header|
+| 70|              trailer         |('Content-type','text/html')|
+| 78|                arglist       |'Content-type','text/html'|
+| 68|                  atom        |'Content-type'|
+| 68|                  atom        |'text/html'|
+| 14|          simple_stmt         |self.end_headers()  |
+| 67|            atom_expr         |self.end_headers()|
+| 68|              atom            |self|
+| 70|              trailer         |.end_headers|
+| 70|              trailer         |()|
+| 14|          simple_stmt         |message="Hello world!"  |
+| 16|            expr_stmt         |message="Hello world!"|
+| 68|              atom            |message|
+| 68|              atom            |"Hello world!"|
+| 14|          simple_stmt         |self.wfile.write(bytes(message,"utf8"))  |
+| 67|            atom_expr         |self.wfile.write(bytes(message,"utf8"))|
+| 68|              atom            |self|
+| 70|              trailer         |.wfile|
+| 70|              trailer         |.write|
+| 70|              trailer         |(bytes(message,"utf8"))|
+| 67|                atom_expr     |bytes(message,"utf8")|
+| 68|                  atom        |bytes|
+| 70|                  trailer     |(message,"utf8")|
+| 78|                    arglist    |message,"utf8"|
+| 68|                      atom    |message|
+| 68|                      atom    |"utf8"|
+| 14|          simple_stmt         |return\r\n|
+| 25|            return_stmt       |return|
+|  7|  funcdef                     |defrun():      print('starting server...')  server_address=('127.0.0.1',8081)  httpd=HTTPServer(server_address,testHTTPServer_RequestHandler)  print('running server...')  httpd.serve_forever()\r\n\n|
+|  8|    parameters                |()|
+| 48|    suite                     |      print('starting server...')  server_address=('127.0.0.1',8081)  httpd=HTTPServer(server_address,testHTTPServer_RequestHandler)  print('running server...')  httpd.serve_forever()\r\n\n|
+| 14|      simple_stmt             |print('starting server...')  |
+| 67|        atom_expr             |print('starting server...')|
+| 68|          atom                |print|
+| 70|          trailer             |('starting server...')|
+| 68|            atom              |'starting server...'|
+| 14|      simple_stmt             |server_address=('127.0.0.1',8081)  |
+| 16|        expr_stmt             |server_address=('127.0.0.1',8081)|
+| 68|          atom                |server_address|
+| 68|          atom                |('127.0.0.1',8081)|
+| 69|            testlist_comp     |'127.0.0.1',8081|
+| 68|              atom            |'127.0.0.1'|
+| 68|              atom            |8081|
+| 14|      simple_stmt             |httpd=HTTPServer(server_address,testHTTPServer_RequestHandler)  |
+| 16|        expr_stmt             |httpd=HTTPServer(server_address,testHTTPServer_RequestHandler)|
+| 68|          atom                |httpd|
+| 67|          atom_expr           |HTTPServer(server_address,testHTTPServer_RequestHandler)|
+| 68|            atom              |HTTPServer|
+| 70|            trailer           |(server_address,testHTTPServer_RequestHandler)|
+| 78|              arglist         |server_address,testHTTPServer_RequestHandler|
+| 68|                atom          |server_address|
+| 68|                atom          |testHTTPServer_RequestHandler|
+| 14|      simple_stmt             |print('running server...')  |
+| 67|        atom_expr             |print('running server...')|
+| 68|          atom                |print|
+| 70|          trailer             |('running server...')|
+| 68|            atom              |'running server...'|
+| 14|      simple_stmt             |httpd.serve_forever()\r\n|
+| 67|        atom_expr             |httpd.serve_forever()|
+| 68|          atom                |httpd|
+| 70|          trailer             |.serve_forever|
+| 70|          trailer             |()|
+| 14|  simple_stmt                 |run()\r\n|
+| 67|    atom_expr                 |run()|
+| 68|      atom                    |run|
+| 70|      trailer                 |()|
+

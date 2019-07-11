@@ -9,12 +9,9 @@ import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.python.Python3Lexer;
-import org.jqassistant.contrib.plugin.python.Python3Parser;
-import org.jqassistant.contrib.plugin.python.Python3Parser.File_inputContext;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFileDescriptor;
 import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
 import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.VisitorHelper;
@@ -44,13 +41,12 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
         FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
         PythonSourceFileDescriptor pythonSourceFileDescriptor = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonSourceFileDescriptor.class);
 
-        InputStream inputStream = PythonFileScannerPlugin.class.getResourceAsStream("/examples/http_server.py");
-        Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
-        TokenStream tokenStream = new CommonTokenStream(lexer);
+        String examplePath = "/examples/http_server.py";
+        InputStream inputStream = PythonFileScannerPlugin.class.getResourceAsStream(examplePath);
+        Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         Python3Parser parser = new Python3Parser(tokenStream);
-        final File_inputContext file_inputContext = parser.file_input();
-        ParseTree tree = file_inputContext;
-        System.out.println(tree.getText());
+        File_inputContext file_inputContext = parser.file_input();
 
         VisitorHelper visitorHelper = new VisitorHelper(scannerContext, pythonSourceFileDescriptor);
 
