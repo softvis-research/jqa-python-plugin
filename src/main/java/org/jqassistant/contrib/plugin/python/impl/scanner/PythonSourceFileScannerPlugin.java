@@ -45,7 +45,6 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
         try (final InputStream inputStream = item.createStream()) {
             pythonSourceFile.setFileName(item.getFile().getName());
 
-
             final Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
             final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
             final Python3Parser parser = new Python3Parser(tokenStream);
