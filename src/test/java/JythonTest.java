@@ -42,15 +42,17 @@ public class JythonTest {
         int indentSize = 2;
 
         System.out.println(ANSI_RED + "|" + ANSI_RESET
-                + whitespace.repeat(Math.max(3 - ruleIndex.length(), 0))
+                + new String(new char[Math.max(3 - ruleIndex.length(), 0)]).replace("\0", whitespace)
                 + ruleIndex
                 + ANSI_RED + "|" + ANSI_RESET
-                + whitespace.repeat(indentDepth * indentSize)
+                + new String(new char[indentDepth * indentSize]).replace("\0", whitespace)
                 + ANSI_GREEN + ruleName + ANSI_RESET
-                + whitespace.repeat(Math.max((15 - indentDepth) * indentSize - ruleName.length(), 4))
+                + new String(new char[Math.max((15 - indentDepth) * indentSize - ruleName.length(), 4)]).replace("\0", whitespace)
                 + ANSI_RED + "|" + ANSI_RESET
-//                + whitespace.repeat(indentDepth * indentSize)
+                //                + new String(new char[indentDepth * indentSize]).replace("\0", whitespace)
                 + source
+                .replace("\n", (ANSI_CYAN + "\\n" + ANSI_RESET))
+                .replace("\r", (ANSI_CYAN + "\\r" + ANSI_RESET))
                 + ANSI_RED + "|" + ANSI_RESET
         );
     }

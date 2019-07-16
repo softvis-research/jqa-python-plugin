@@ -7,7 +7,10 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3BaseListener;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.ClassdefContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.ParametersContext;
+import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.VarargslistContext;
 import org.jqassistant.contrib.plugin.python.impl.scanner.PythonFileScannerPlugin;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,14 +26,14 @@ public class ANTLRTest {
 
     @Before
     public void init() throws IOException {
+        exampleFilePath = "/examples/http_server.py";
+//        exampleFilePath = "/examples/render.py";
+//        exampleFilePath = "/examples/simple.py";
+
         System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
         columnPrint("INT", "(depth...) Rule Name", "Python 3 Source Code", 0);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
-
-        exampleFilePath = "/examples/http_server.py";
-//        exampleFilePath = "/examples/render.py";
-//        exampleFilePath = "/examples/simple.py";
 
         InputStream inputStream = PythonFileScannerPlugin.class.getResourceAsStream(exampleFilePath);
         Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
@@ -69,6 +72,30 @@ public class ANTLRTest {
                         ctx.getText(),
                         0);
             }
+
+            @Override
+            public void enterClassdef(final ClassdefContext ctx) {
+                columnPrint(Integer.toString(ctx.getRuleIndex()),
+                        Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.NAME().getText(),
+                        ctx.getText(),
+                        0);
+            }
+
+            @Override
+            public void enterVarargslist(final VarargslistContext ctx) {
+                columnPrint(Integer.toString(ctx.getRuleIndex()),
+                        Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.getText(),
+                        ctx.getText(),
+                        0);
+            }
+
+            @Override
+            public void enterParameters(final ParametersContext ctx) {
+                columnPrint(Integer.toString(ctx.getRuleIndex()),
+                        Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.getText(),
+                        ctx.getText(),
+                        0);
+            }
         }, parser.file_input());
     }
 
@@ -98,14 +125,14 @@ public class ANTLRTest {
         int indentSize = 2;
 
         System.out.println(ANSI_RED + "|" + ANSI_RESET
-                + whitespace.repeat(Math.max(3 - ruleIndex.length(), 0))
+                + new String(new char[Math.max(3 - ruleIndex.length(), 0)]).replace("\0", whitespace)
                 + ruleIndex
                 + ANSI_RED + "|" + ANSI_RESET
-                + whitespace.repeat(indentDepth * indentSize)
+                + new String(new char[indentDepth * indentSize]).replace("\0", whitespace)
                 + ANSI_GREEN + ruleName + ANSI_RESET
-                + whitespace.repeat(Math.max((15 - indentDepth) * indentSize - ruleName.length(), 4))
+                + new String(new char[Math.max((15 - indentDepth) * indentSize - ruleName.length(), 4)]).replace("\0", whitespace)
                 + ANSI_RED + "|" + ANSI_RESET
-//                + whitespace.repeat(indentDepth * indentSize)
+//                + new String(new char[indentDepth * indentSize]).replace("\0", whitespace)
                 + source
                         .replace("\n", (ANSI_CYAN + "\\n" + ANSI_RESET))
                         .replace("\r", (ANSI_CYAN + "\\r" + ANSI_RESET))
