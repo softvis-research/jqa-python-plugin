@@ -8,12 +8,12 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 import java.util.List;
 
-public interface PythonSourceFileDescriptor extends PythonSourceCodeDescriptor, FileDescriptor {
+public interface PythonSourceFile extends PythonSourceCode, FileDescriptor {
 
     @Relation("CONTAINS")
-    List<TypeDescriptor> getTypes();
+    List<Type> getTypes();
 
     @ResultOf
     @Cypher("MATCH (file:SourceCode:File) WHERE id(file)={this} MERGE (file)-[:CONTAINS]->(type:SourceCode:Type{fqn:{fqn}}) RETURN type")
-    TypeDescriptor resolveType(@Parameter("fqn") String fqn);
+    Type resolveType(@Parameter("fqn") String fqn);
 }

@@ -13,14 +13,14 @@ public class JythonTest {
 
     @Before
     public void init() throws IOException {
+        exampleFilePath = "src/test/resources/example/http_server.py";
+//        exampleFilePath = "src/test/resources/example/render.py";
+//        exampleFilePath = "src/test/resources/example/simple.py";
+
         System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
         columnPrint("INT", "(depth...) Rule Name", "Python 3 Source Code", 0);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
-
-        exampleFilePath = "src/main/resources/examples/http_server.py";
-//        exampleFilePath = "src/main/resources/examples/render.py";
-//        exampleFilePath = "src/main/resources/examples/simple.py";
     }
     @Test
     public void testParse() throws IOException {

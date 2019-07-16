@@ -11,10 +11,10 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.ClassdefContex
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.ParametersContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.VarargslistContext;
-import org.jqassistant.contrib.plugin.python.impl.scanner.PythonFileScannerPlugin;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -26,16 +26,16 @@ public class ANTLRTest {
 
     @Before
     public void init() throws IOException {
-        exampleFilePath = "/examples/http_server.py";
-//        exampleFilePath = "/examples/render.py";
-//        exampleFilePath = "/examples/simple.py";
+        exampleFilePath = "src/test/resources/example/http_server.py";
+//        exampleFilePath = "src/test/resources/example/render.py";
+//        exampleFilePath = "src/test/resources/example/simple.py";
 
         System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
         columnPrint("INT", "(depth...) Rule Name", "Python 3 Source Code", 0);
         System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
 
-        InputStream inputStream = PythonFileScannerPlugin.class.getResourceAsStream(exampleFilePath);
+        InputStream inputStream = new FileInputStream(exampleFilePath);
         Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         parser = new Python3Parser(tokenStream);

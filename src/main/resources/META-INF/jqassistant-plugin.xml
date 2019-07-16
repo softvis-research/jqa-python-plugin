@@ -1,13 +1,19 @@
-<jqa-plugin:jqassistant-plugin xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.1" name="XML">
-    <description>Provides scanners for Python 3 Source Code</description>
+<jqa-plugin:jqassistant-plugin name="XML"
+                               xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.4">
+    <description>Provides scanners for Source Code (currently Python).</description>
     <model>
-        <class>org.jqassistant.contrib.plugin.python.api.model.PythonFileDescriptor</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.PythonDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PackageMember</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.Python</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonFile</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonSourceCode</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonSourceDirectory</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.Type</class>
     </model>
     <scope>
         <class>org.jqassistant.contrib.plugin.python.api.scanner.PythonScope</class>
     </scope>
-    <scanner> 
+    <scanner>
         <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceDirectoryScannerPlugin</class>
         <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceFileScannerPlugin</class>
     </scanner>

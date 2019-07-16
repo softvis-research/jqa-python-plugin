@@ -1,7 +1,7 @@
 package org.jqassistant.contrib.plugin.python.impl.scanner.visitor;
 
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
-import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFileDescriptor;
+import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 
 /**
  * The helper delegates creation and caching of types to the type resolver,
@@ -12,10 +12,10 @@ import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFileDescripto
  */
 public class VisitorHelper {
     private ScannerContext scannerContext;
-    private PythonSourceFileDescriptor pythonSourceFileDescriptor;
+    private PythonSourceFile pythonSourceFile;
 
-    public VisitorHelper(ScannerContext scannerContext, PythonSourceFileDescriptor pythonSourceFileDescriptor) {
+    public VisitorHelper(ScannerContext scannerContext, PythonSourceFile pythonSourceFile) {
         this.scannerContext = scannerContext;
-        this.pythonSourceFileDescriptor = pythonSourceFileDescriptor;
+        this.pythonSourceFile = pythonSourceFile;
     }
 }

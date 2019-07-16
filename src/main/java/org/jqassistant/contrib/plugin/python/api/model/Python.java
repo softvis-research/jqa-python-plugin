@@ -9,5 +9,5 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
  */
 @Abstract
 @Label("Python")
-public interface PythonDescriptor extends Descriptor {
+public interface Python extends Descriptor {
 }
