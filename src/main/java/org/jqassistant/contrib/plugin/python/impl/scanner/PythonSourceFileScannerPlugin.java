@@ -14,10 +14,12 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
+import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.FieldVisitor;
 import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.VisitorHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.lang.model.type.TypeVisitor;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -49,7 +51,9 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
             final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
             final Python3Parser parser = new Python3Parser(tokenStream);
 
-            File_inputContext file_inputContext = parser.file_input();
+            File_inputContext tree = parser.file_input();
+
+            tree.accept(new FieldVisitor(visitorHelper));
         } catch (PythonSourceException pse) {
             LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonSourceFile.getFileName());
         }

@@ -54,7 +54,6 @@ public class ANTLRTest {
     public void testVisitor(){
         file_inputContext = parser.file_input();
 
-//        ParseTreeVisitor
     }
 
     @Test

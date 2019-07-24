@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.plugin.python.api.model;
 
+import com.buschmais.jqassistant.plugin.common.api.model.ValueDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
@@ -20,6 +21,29 @@ public interface Method {
      */
     @Relation("HAS")
     List<Parameter> getParameters();
+
+    /**
+     * Return the return type of this method.
+     *
+     * @return The return type.
+     */
+    @Relation("RETURNS")
+    Type getReturns();
+
+    void setReturns(Type returns);
+
+    @Relation("HAS_DEFAULT")
+    ValueDescriptor<?> getHasDefault();
+
+    void setHasDefault(ValueDescriptor<?> hasDefault);
+
+    /**
+     * Return all declared throwables of this method.
+     *
+     * @return The declared throwables.
+     */
+    @Relation("RAISES")
+    List<Type> getDeclaredThrowables();
 
     /**
      * Return all read accesses to fields this method performs.
@@ -62,6 +86,21 @@ public interface Method {
     Boolean isNative();
 
     void setNative(Boolean nativeMethod);
+
+    /**
+     * Return the cyclomatic complexity of the method.
+     *
+     * @return The cyclomatic complexity.
+     */
+    int getCyclomaticComplexity();
+
+    void setCyclomaticComplexity(int cyclomaticComplexity);
+
+    @Declares
+    List<Type> getDeclaredInnerClasses();
+
+    @Declares
+    List<Type> getFields();
 
     /**
      * Return the first line number of the method.
