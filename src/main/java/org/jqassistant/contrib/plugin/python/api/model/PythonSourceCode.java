@@ -4,9 +4,9 @@ import com.buschmais.xo.api.annotation.Abstract;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 
 /**
- * Defines label "SourceCode"
+ * Defines label "PythonSourceCode"
  */
 @Abstract
-@Label("SourceCode")
+@Label("PythonSourceCode")
 public interface PythonSourceCode {
 }

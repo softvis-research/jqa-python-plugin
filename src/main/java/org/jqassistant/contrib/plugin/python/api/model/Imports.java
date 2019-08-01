@@ -10,10 +10,10 @@ import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 public interface Imports extends Descriptor {
 
     @Incoming
-    Type getDependency();
+    ObjectDescriptor getDependency();
 
     @Outgoing
-    Type getDependent();
+    ObjectDescriptor getDependent();
 
     Integer getWeight();
 

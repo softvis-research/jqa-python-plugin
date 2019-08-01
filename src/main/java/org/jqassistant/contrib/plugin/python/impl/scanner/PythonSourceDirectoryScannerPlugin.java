@@ -47,9 +47,6 @@ public class PythonSourceDirectoryScannerPlugin extends AbstractDirectoryScanner
 //        if (scannerContext.peekOrDefault(PythonTypeResolver.class, null) == null) {
 //            scannerContext.push(PythonTypeResolver.class, new PythonTypeResolver(scannerContext));
 //        }
-//        if (scannerContext.peekOrDefault(PythonTypeSolver.class, null) == null) {
-//            scannerContext.push(PythonTypeSolver.class, new PythonTypeSolver(containerDescriptor.getFileName(), this.jarDirName));
-//        }
     }
 
     @Override

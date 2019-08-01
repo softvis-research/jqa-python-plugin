@@ -9,17 +9,19 @@ import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
-import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.FieldVisitor;
+import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.VariableVisitor;
 import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.VisitorHelper;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.PythonSourceWalker;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.WalkerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.lang.model.type.TypeVisitor;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,6 +36,7 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
 
     @Override
     public boolean accepts(FileResource item, String path, Scope scope) {
+        LOGGER.debug("item, path, scope: " + item + ",\t" + path + ", \t" + scope);
         return PythonScope.SRC.equals(scope) && path.toLowerCase().endsWith(".py");
     }
 
@@ -43,6 +46,7 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
         final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
         final PythonSourceFile pythonSourceFile = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonSourceFile.class);
         final VisitorHelper visitorHelper = new VisitorHelper(scannerContext, pythonSourceFile);
+        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, pythonSourceFile);
 
         try (final InputStream inputStream = item.createStream()) {
             pythonSourceFile.setFileName(item.getFile().getName());
@@ -53,7 +57,8 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
 
             File_inputContext tree = parser.file_input();
 
-            tree.accept(new FieldVisitor(visitorHelper));
+//            tree.accept(new VariableVisitor(visitorHelper));
+            ParseTreeWalker.DEFAULT.walk(new PythonSourceWalker(walkerHelper), tree);
         } catch (PythonSourceException pse) {
             LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonSourceFile.getFileName());
         }

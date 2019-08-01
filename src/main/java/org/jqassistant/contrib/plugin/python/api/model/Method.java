@@ -6,13 +6,18 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 
+import javax.management.Descriptor;
 import java.util.List;
 
 /**
  * Describes a method.
  */
 @Label(value = "Method")
-public interface Method {
+public interface Method extends Signature, Descriptor {
+
+    @Declares
+    @Incoming
+    ObjectDescriptor getDeclaringObject();
 
     /**
      * Return all declared parameters of this method.
@@ -28,9 +33,9 @@ public interface Method {
      * @return The return type.
      */
     @Relation("RETURNS")
-    Type getReturns();
+    ObjectDescriptor getReturns();
 
-    void setReturns(Type returns);
+    void setReturns(ObjectDescriptor returns);
 
     @Relation("HAS_DEFAULT")
     ValueDescriptor<?> getHasDefault();
@@ -43,13 +48,14 @@ public interface Method {
      * @return The declared throwables.
      */
     @Relation("RAISES")
-    List<Type> getDeclaredThrowables();
+    List<ObjectDescriptor> getDeclaredThrowables();
 
     /**
      * Return all read accesses to fields this method performs.
      *
      * @return All read accesses to fields this method performs.
      */
+    @Outgoing
     List<Reads> getReads();
 
     /**
@@ -57,6 +63,7 @@ public interface Method {
      *
      * @return All write accesses to fields this method performs.
      */
+    @Outgoing
     List<Writes> getWrites();
 
     /**
@@ -76,16 +83,8 @@ public interface Method {
     List<Calls> getCalledBy();
 
     @Declares
+    @Outgoing
     List<Variable> getVariables();
-
-    /**
-     * Return <code>true</code> if this method is native.
-     *
-     * @return <code>true</code> if this method is native.
-     */
-    Boolean isNative();
-
-    void setNative(Boolean nativeMethod);
 
     /**
      * Return the cyclomatic complexity of the method.
@@ -96,11 +95,9 @@ public interface Method {
 
     void setCyclomaticComplexity(int cyclomaticComplexity);
 
-    @Declares
-    List<Type> getDeclaredInnerClasses();
-
-    @Declares
-    List<Type> getFields();
+//    @Declares
+//    @Outgoing
+//    List<ObjectDescriptor> getDeclaredInnerClasses();
 
     /**
      * Return the first line number of the method.

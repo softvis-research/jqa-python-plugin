@@ -5,7 +5,7 @@ import com.buschmais.jqassistant.plugin.common.api.model.MD5Descriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.ValidDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
-public interface ClassFile extends Type, FileDescriptor, MD5Descriptor, ValidDescriptor {
+public interface ClassFile extends ObjectDescriptor, FileDescriptor, MD5Descriptor, ValidDescriptor {
 
     /**
      * Return the super class.
@@ -13,7 +13,7 @@ public interface ClassFile extends Type, FileDescriptor, MD5Descriptor, ValidDes
      * @return The super class.
      */
     @Relation("INHERITS")
-    Type getSuperClass();
+    ObjectDescriptor getSuperClass();
 
     /**
      * Set the super class.
@@ -21,7 +21,7 @@ public interface ClassFile extends Type, FileDescriptor, MD5Descriptor, ValidDes
      * @param superClass
      *            The super class.
      */
-    void setSuperClass(Type superClass);
+    void setSuperClass(ObjectDescriptor superClass);
 
     /**
      * Return the name of the source file.

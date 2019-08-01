@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Defines the declares relation used for fields, methods and inner classes.
+ * Defines the declares relation used for variables, methods and inner classes.
  */
 @Relation("DECLARES")
 @Retention(RetentionPolicy.RUNTIME)
