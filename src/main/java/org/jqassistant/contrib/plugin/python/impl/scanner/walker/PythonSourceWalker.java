@@ -92,12 +92,16 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Xor_exprContex
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_argContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_exprContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_stmtContext;
+import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 
 public class PythonSourceWalker extends Python3BaseListener {
+//    protected PythonSourceFile pythonSourceFile;
     protected WalkerHelper walkerHelper;
     protected Descriptor descriptor;
 
-    public PythonSourceWalker(WalkerHelper walkerHelper) {
+
+    public PythonSourceWalker(final PythonSourceFile pythonSourceFile, final WalkerHelper walkerHelper) {
+//        this.pythonSourceFile = pythonSourceFile;
         this.walkerHelper = walkerHelper;
     }
 
@@ -114,14 +118,11 @@ public class PythonSourceWalker extends Python3BaseListener {
     @Override
     public void enterFile_input(final File_inputContext ctx) {
         super.enterFile_input(ctx);
-        walkerHelper.createFile();
-        System.out.println("file input");
     }
 
     @Override
     public void exitFile_input(final File_inputContext ctx) {
         super.exitFile_input(ctx);
-        System.out.println("exit file input");
     }
 
     @Override
@@ -186,7 +187,8 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterParameters(final ParametersContext ctx) {
-        super.enterParameters(ctx);
+        String text = ctx.getText();
+        walkerHelper.createParameters(text);
     }
 
     @Override

@@ -58,7 +58,7 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
             File_inputContext tree = parser.file_input();
 
 //            tree.accept(new VariableVisitor(visitorHelper));
-            ParseTreeWalker.DEFAULT.walk(new PythonSourceWalker(walkerHelper), tree);
+            ParseTreeWalker.DEFAULT.walk(new PythonSourceWalker(pythonSourceFile, walkerHelper), tree);
         } catch (PythonSourceException pse) {
             LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonSourceFile.getFileName());
         }

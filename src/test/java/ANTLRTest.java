@@ -103,6 +103,8 @@ public class ANTLRTest {
                         Python3Parser.ruleNames[ctx.getRuleIndex()] + " " + ctx.getText(),
                         ctx.getText(),
                         0);
+
+
             }
         }, parser.file_input());
     }
