@@ -13,10 +13,10 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
+import org.jqassistant.contrib.plugin.python.api.model.Package;
 import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
-import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.VariableVisitor;
-import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.VisitorHelper;
+import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.StoreHelper;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.PythonSourceWalker;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.WalkerHelper;
 import org.slf4j.Logger;
@@ -45,11 +45,13 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
         final ScannerContext scannerContext = scanner.getContext();
         final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
         final PythonSourceFile pythonSourceFile = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonSourceFile.class);
-        final VisitorHelper visitorHelper = new VisitorHelper(scannerContext, pythonSourceFile);
-        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, pythonSourceFile);
+//        final Package packageDescriptor = scannerContext.getStore().addDescriptorType(fileDescriptor, Package.class);
+        final StoreHelper storeHelper = new StoreHelper(scannerContext, pythonSourceFile);
+        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, pythonSourceFile, storeHelper);
 
         try (final InputStream inputStream = item.createStream()) {
             pythonSourceFile.setFileName(item.getFile().getName());
+//            packageDescriptor.setFileName(item.getFile().getName());
 
             final Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
             final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
@@ -63,7 +65,6 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
             LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonSourceFile.getFileName());
         }
 
-//        visitorHelper.storeDependencies();
         return pythonSourceFile;
     }
 }

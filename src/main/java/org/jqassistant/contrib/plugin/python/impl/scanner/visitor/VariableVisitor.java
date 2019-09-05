@@ -9,8 +9,8 @@ import org.jqassistant.contrib.plugin.python.api.model.ObjectDescriptor;
  */
 public class VariableVisitor extends AbstractPythonSourceVisitor<Variable> {
 
-    public VariableVisitor(VisitorHelper visitorHelper) {
-        super(visitorHelper);
+    public VariableVisitor(StoreHelper storeHelper) {
+        super(storeHelper);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class VariableVisitor extends AbstractPythonSourceVisitor<Variable> {
         String text = tree.getText();
 
 
-        System.out.println(visitorHelper.getVariable(signature, parentObject));
+//        System.out.println(storeHelper.getVariable(signature, parentObject));
 //        return visitorHelper.getField(signature, parent);
         return tree.accept(this);
     }

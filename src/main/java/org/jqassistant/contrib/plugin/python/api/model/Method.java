@@ -1,21 +1,21 @@
 package org.jqassistant.contrib.plugin.python.api.model;
 
+import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.ValueDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 
-import javax.management.Descriptor;
 import java.util.List;
 
 /**
  * Describes a method.
  */
 @Label(value = "Method")
-public interface Method extends Signature, Descriptor {
+public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
 
-    @Declares
+    @Defines
     @Incoming
     ObjectDescriptor getDeclaringObject();
 
@@ -82,7 +82,7 @@ public interface Method extends Signature, Descriptor {
     @Incoming
     List<Calls> getCalledBy();
 
-    @Declares
+    @Defines
     @Outgoing
     List<Variable> getVariables();
 

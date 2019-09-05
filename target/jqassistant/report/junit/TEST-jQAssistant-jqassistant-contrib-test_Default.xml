@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuite name="jQAssistant-jqassistant-contrib-test_Default" tests="4" failures="0" errors="0" time="0.0">
+    <testcase name="Concept_junit4_TestClass" time="0.0" classname="jQAssistant-jqassistant-contrib-test_Default"/>
+    <testcase name="Constraint_jqassistant-contrib-test_IntegrationTestClassSuffix" time="0.0" classname="jQAssistant-jqassistant-contrib-test_Default"/>
+    <testcase name="Concept_jqassistant-contrib-test_IT" time="0.0" classname="jQAssistant-jqassistant-contrib-test_Default"/>
+    <testcase name="Concept_junit4_TestMethod" time="0.0" classname="jQAssistant-jqassistant-contrib-test_Default"/>
+</testsuite>

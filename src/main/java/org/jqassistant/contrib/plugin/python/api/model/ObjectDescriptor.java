@@ -16,7 +16,7 @@ import static com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 public interface ObjectDescriptor extends PackageMember {
 
     @Incoming
-    @Declares
+    @Defines
     ObjectDescriptor getDeclaringObject();
 
     /**
@@ -25,7 +25,7 @@ public interface ObjectDescriptor extends PackageMember {
      * @return The declared inner classes.
      */
     @Outgoing
-    @Declares
+    @Defines
     Set<ObjectDescriptor> getDeclaredInnerClasses();
 
     /**
@@ -34,7 +34,7 @@ public interface ObjectDescriptor extends PackageMember {
      * @return The declared methods.
      */
     @Outgoing
-    @Declares
+    @Defines
     List<Method> getDeclaredMethods();
 
     /**
@@ -43,7 +43,7 @@ public interface ObjectDescriptor extends PackageMember {
      * @return The declared variables.
      */
     @Outgoing
-    @Declares
+    @Defines
     List<Variable> getDeclaredVariables();
 
 

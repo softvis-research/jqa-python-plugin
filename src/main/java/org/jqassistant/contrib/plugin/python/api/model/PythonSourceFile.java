@@ -10,8 +10,15 @@ import java.util.List;
 
 public interface PythonSourceFile extends PythonSourceCode, FileDescriptor {
 
+    @Relation("IMPORTS")
+    List<ObjectDescriptor> getImports();
+
     @Relation("CONTAINS")
-    List<ObjectDescriptor> getTypes();
+    List<ObjectDescriptor> getContains();
+
+    @Relation("DEFINES")
+    List<Method> getDefines();
+
 
     @ResultOf
     @Cypher("MATCH (file:PythonSourceCode:File) WHERE id(file)={this} MERGE (file)-[:CONTAINS]->(type:PythonSourceCode:Type{fqn:{fqn}}) RETURN type")

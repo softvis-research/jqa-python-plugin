@@ -95,13 +95,13 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_stmtCont
 import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 
 public class PythonSourceWalker extends Python3BaseListener {
-//    protected PythonSourceFile pythonSourceFile;
+    protected PythonSourceFile pythonSourceFile;
     protected WalkerHelper walkerHelper;
     protected Descriptor descriptor;
 
 
     public PythonSourceWalker(final PythonSourceFile pythonSourceFile, final WalkerHelper walkerHelper) {
-//        this.pythonSourceFile = pythonSourceFile;
+        this.pythonSourceFile = pythonSourceFile;
         this.walkerHelper = walkerHelper;
     }
 
@@ -117,7 +117,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterFile_input(final File_inputContext ctx) {
-        super.enterFile_input(ctx);
+        walkerHelper.createFile(pythonSourceFile, ctx);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterFuncdef(final FuncdefContext ctx) {
-        super.enterFuncdef(ctx);
+        walkerHelper.createFunction(pythonSourceFile, ctx);
     }
 
     @Override
@@ -187,8 +187,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterParameters(final ParametersContext ctx) {
-        String text = ctx.getText();
-        walkerHelper.createParameters(text);
+        walkerHelper.createParameters(pythonSourceFile, ctx);
     }
 
     @Override
@@ -388,7 +387,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterImport_stmt(final Import_stmtContext ctx) {
-        super.enterImport_stmt(ctx);
+        walkerHelper.createImport(pythonSourceFile, ctx);
     }
 
     @Override
@@ -398,6 +397,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterImport_name(final Import_nameContext ctx) {
+        System.out.println("enterImport_name" +  ctx.getText());
         super.enterImport_name(ctx);
     }
 
@@ -878,7 +878,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterClassdef(final ClassdefContext ctx) {
-        super.enterClassdef(ctx);
+        walkerHelper.createClass(pythonSourceFile, ctx);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.jqassistant.contrib.plugin.python.impl.scanner.visitor;
 
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
-import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -95,11 +95,11 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_stmtCont
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Visitor;
 
 public class PythonSourceVisitor<T extends Descriptor> implements Python3Visitor<T> {
-    protected VisitorHelper visitorHelper;
+    protected StoreHelper storeHelper;
     protected Descriptor descriptor;
 
-    public PythonSourceVisitor(VisitorHelper visitorHelper) {
-        this.visitorHelper = visitorHelper;
+    public PythonSourceVisitor(StoreHelper storeHelper) {
+        this.storeHelper = storeHelper;
     }
 
     @Override 

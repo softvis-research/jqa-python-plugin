@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jqa-report:jqassistant-report xmlns:jqa-report="http://www.buschmais.com/jqassistant/core/report/schema/v1.4">
+  <group id="jqassistant-contrib:Default" date="2019-09-04T07:39:18">
+    <group id="jqassistant-contrib-maven:Default" date="2019-09-04T07:39:18">
+      <constraint id="jqassistant-contrib-maven:GroupId">
+        <description>The groupId for jQAssistant contrib Maven projects must follow the pattern 'org.jqassistant.contrib.&lt;project&gt;'.</description>
+        <status>success</status>
+        <severity level="2">major</severity>
+        <duration>185</duration>
+      </constraint>
+      <concept id="jqassistant-contrib-maven:ParentProject">
+        <description>Labels all Maven projects which declare "org.jqassistant.contrib.common:parent" as parent module with "Parent".</description>
+        <result>
+          <columns count="1">
+            <column primary="true">parent</column>
+          </columns>
+          <rows count="1">
+            <row>
+              <column name="parent">
+                <element language="Generic">Named</element>
+                <value>jQAssistant Python Plugin</value>
+              </column>
+            </row>
+          </rows>
+        </result>
+        <status>success</status>
+        <severity level="4">info</severity>
+        <duration>155</duration>
+      </concept>
+      <constraint id="jqassistant-contrib-maven:ParentProjectMustDefineDeveloper">
+        <description>At least one developer must be specified in the "developers" section of the parent pom.xml of a contribution project.</description>
+        <status>success</status>
+        <severity level="2">major</severity>
+        <duration>178</duration>
+      </constraint>
+      <constraint id="jqassistant-contrib-maven:MavenModulesMustUseParentGroupId">
+        <description>All Maven projects must define the same groupId as the parent of the contribution project.</description>
+        <status>success</status>
+        <severity level="2">major</severity>
+        <duration>154</duration>
+      </constraint>
+      <constraint id="jqassistant-contrib-maven:ParentProjectMustDefineUrl">
+        <description>The project URL must be defined in the parent pom.xml of a contribution project.</description>
+        <status>success</status>
+        <severity level="2">major</severity>
+        <duration>576</duration>
+      </constraint>
+      <duration>1505</duration>
+    </group>
+    <group id="jqassistant-contrib-package:Default" date="2019-09-04T07:39:20">
+      <constraint id="jqassistant-contrib-package:PackagesMustHaveGroupIdPrefix">
+        <description>All package names used in a Maven project must start with the groupId.</description>
+        <status>success</status>
+        <severity level="2">major</severity>
+        <duration>251</duration>
+      </constraint>
+      <duration>280</duration>
+    </group>
+    <group id="jqassistant-contrib-test:Default" date="2019-09-04T07:39:20">
+      <concept id="junit4:TestMethod">
+        <description>Finds all test methods (i.e. annotated with "@org.junit.Test") and labels them with "Test" and
+            "Junit4".
+        </description>
+        <result>
+          <columns count="1">
+            <column primary="true">Test</column>
+          </columns>
+          <rows count="6">
+            <row>
+              <column name="Test">
+                <element language="Java">Method</element>
+                <source name="/org/jqassistant/contrib/plugin/python/test/PythonSourceFileScannerIT.class"></source>
+                <value>org.jqassistant.contrib.plugin.python.test.PythonSourceFileScannerIT#void testScanPythonFile()</value>
+              </column>
+            </row>
+            <row>
+              <column name="Test">
+                <element language="Java">Method</element>
+                <source name="/org/jqassistant/contrib/plugin/python/test/PythonSourceDirectoryScannerIT.class"></source>
+                <value>org.jqassistant.contrib.plugin.python.test.PythonSourceDirectoryScannerIT#void testScanPythonDirectory()</value>
+              </column>
+            </row>
+            <row>
+              <column name="Test">
+                <element language="Java">Method</element>
+                <source name="/ANTLRTest.class"></source>
+                <value>ANTLRTest#void testParse()</value>
+              </column>
+            </row>
+            <row>
+              <column name="Test">
+                <element language="Java">Method</element>
+                <source name="/ANTLRTest.class"></source>
+                <value>ANTLRTest#void testVisitor()</value>
+              </column>
+            </row>
+            <row>
+              <column name="Test">
+                <element language="Java">Method</element>
+                <source name="/ANTLRTest.class"></source>
+                <value>ANTLRTest#void testWalker()</value>
+              </column>
+            </row>
+            <row>
+              <column name="Test">
+                <element language="Java">Method</element>
+                <source name="/JythonTest.class"></source>
+                <value>JythonTest#void testParse()</value>
+              </column>
+            </row>
+          </rows>
+        </result>
+        <status>success</status>
+        <severity level="4">info</severity>
+        <duration>81</duration>
+      </concept>
+      <concept id="junit4:TestClass">
+        <description>Labels all classes containing test methods with "Test" and "Junit4".</description>
+        <result>
+          <columns count="2">
+            <column primary="true">TestClass</column>
+            <column>TestMethods</column>
+          </columns>
+          <rows count="4">
+            <row>
+              <column name="TestClass">
+                <element language="Java">Type</element>
+                <source name="/ANTLRTest.class"></source>
+                <value>ANTLRTest</value>
+              </column>
+              <column name="TestMethods">
+                <value>[ANTLRTest#void testParse(),ANTLRTest#void testVisitor(),ANTLRTest#void testWalker()]</value>
+              </column>
+            </row>
+            <row>
+              <column name="TestClass">
+                <element language="Java">Type</element>
+                <source name="/JythonTest.class"></source>
+                <value>JythonTest</value>
+              </column>
+              <column name="TestMethods">
+                <value>[JythonTest#void testParse()]</value>
+              </column>
+            </row>
+            <row>
+              <column name="TestClass">
+                <element language="Java">Type</element>
+                <source name="/org/jqassistant/contrib/plugin/python/test/PythonSourceFileScannerIT.class"></source>
+                <value>org.jqassistant.contrib.plugin.python.test.PythonSourceFileScannerIT</value>
+              </column>
+              <column name="TestMethods">
+                <value>[org.jqassistant.contrib.plugin.python.test.PythonSourceFileScannerIT#void testScanPythonFile()]</value>
+              </column>
+            </row>
+            <row>
+              <column name="TestClass">
+                <element language="Java">Type</element>
+                <source name="/org/jqassistant/contrib/plugin/python/test/PythonSourceDirectoryScannerIT.class"></source>
+                <value>org.jqassistant.contrib.plugin.python.test.PythonSourceDirectoryScannerIT</value>
+              </column>
+              <column name="TestMethods">
+                <value>[org.jqassistant.contrib.plugin.python.test.PythonSourceDirectoryScannerIT#void testScanPythonDirectory()]</value>
+              </column>
+            </row>
+          </rows>
+        </result>
+        <status>success</status>
+        <severity level="4">info</severity>
+        <duration>57</duration>
+      </concept>
+      <concept id="jqassistant-contrib-test:IT">
+        <description>Adds a label "IntegrationTest" to all non-abstract classes deriving from AbstractPluginIT or AbstractJavaPluginIT.</description>
+        <result>
+          <columns count="1">
+            <column primary="true">IntegrationTest</column>
+          </columns>
+          <rows count="2">
+            <row>
+              <column name="IntegrationTest">
+                <element language="Java">Type</element>
+                <source name="/org/jqassistant/contrib/plugin/python/test/PythonSourceDirectoryScannerIT.class"></source>
+                <value>org.jqassistant.contrib.plugin.python.test.PythonSourceDirectoryScannerIT</value>
+              </column>
+            </row>
+            <row>
+              <column name="IntegrationTest">
+                <element language="Java">Type</element>
+                <source name="/org/jqassistant/contrib/plugin/python/test/PythonSourceFileScannerIT.class"></source>
+                <value>org.jqassistant.contrib.plugin.python.test.PythonSourceFileScannerIT</value>
+              </column>
+            </row>
+          </rows>
+        </result>
+        <status>success</status>
+        <severity level="4">info</severity>
+        <duration>283</duration>
+      </concept>
+      <constraint id="jqassistant-contrib-test:IntegrationTestClassSuffix">
+        <description>All integration test classes must have the name suffix "IT" for being executed using the Maven Failsafe Plugin.</description>
+        <status>success</status>
+        <severity level="2">major</severity>
+        <duration>37</duration>
+      </constraint>
+      <duration>646</duration>
+    </group>
+    <duration>652</duration>
+  </group>
+</jqa-report:jqassistant-report>

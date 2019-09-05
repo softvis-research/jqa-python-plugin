@@ -28,8 +28,8 @@ public class ANTLRTest {
 
     @Before
     public void init() throws IOException {
-        exampleFilePath = "src/test/resources/example/http_server.py";
-//        exampleFilePath = "src/test/resources/example/render.py";
+//        exampleFilePath = "src/test/resources/example/http_server.py";
+        exampleFilePath = "src/test/resources/example/render.py";
 //        exampleFilePath = "src/test/resources/example/simple.py";
 
         System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);

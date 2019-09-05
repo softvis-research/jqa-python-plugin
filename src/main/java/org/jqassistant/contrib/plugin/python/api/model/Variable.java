@@ -4,7 +4,6 @@ import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.ValueDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
-import com.buschmais.xo.neo4j.api.annotation.Property;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
 
@@ -16,11 +15,11 @@ import java.util.List;
 @Label(value = "Variable")
 public interface Variable extends PythonSourceCode, NamedDescriptor, Signature, Descriptor {
 
-    @Declares
+    @Defines
     @Incoming
     Object getDeclaringObject();
 
-    @Declares
+    @Defines
     @Incoming
     Method getDeclaringMethod();
 
