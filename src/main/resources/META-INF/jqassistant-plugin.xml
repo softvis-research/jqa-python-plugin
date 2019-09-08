@@ -2,33 +2,24 @@
                                xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.4">
     <description>Provides scanners for Source Code (currently Python).</description>
     <model>
-        <class>org.jqassistant.contrib.plugin.python.api.model.Calls</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.ClassDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.Class</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Constructor</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.LineNumber</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Imports</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.LineNumber</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.ObjectDescriptor</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.Package</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.PackageMember</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.Method</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.Definable</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Parameter</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Python</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.PythonFile</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.PythonSourceCode</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.PythonSourceDirectory</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.Reads</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonPackage</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Signature</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.SourceCode</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.ObjectDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.Value</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Variable</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.Writes</class>
     </model>
     <scope>
         <class>org.jqassistant.contrib.plugin.python.api.scanner.PythonScope</class>
     </scope>
     <scanner>
-        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceDirectoryScannerPlugin</class>
-        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceFileScannerPlugin</class>
+        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PackageScannerPlugin</class>
+        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonFileScannerPlugin</class>
     </scanner>
 </jqa-plugin:jqassistant-plugin>

@@ -1,12 +1,12 @@
 package org.jqassistant.contrib.plugin.python.api.model;
 
-import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
-import com.buschmais.jqassistant.plugin.common.api.model.MD5Descriptor;
-import com.buschmais.jqassistant.plugin.common.api.model.ValidDescriptor;
+import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
+import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
+import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
-public interface ClassDescriptor
-        extends PythonSourceCode, ObjectDescriptor, FileDescriptor, MD5Descriptor, ValidDescriptor {
+@Label(value = "Class", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface Class extends Python, NamedDescriptor, Definable {
 
     /**
      * Return the super class.
@@ -14,7 +14,7 @@ public interface ClassDescriptor
      * @return The super class.
      */
     @Relation("INHERITS")
-    ObjectDescriptor getSuperClass();
+    Class getSuperClass();
 
     /**
      * Set the super class.
@@ -22,7 +22,7 @@ public interface ClassDescriptor
      * @param superClass
      *            The super class.
      */
-    void setSuperClass(ObjectDescriptor superClass);
+    void setSuperClass(Class superClass);
 
     /**
      * Return the name of the source file.

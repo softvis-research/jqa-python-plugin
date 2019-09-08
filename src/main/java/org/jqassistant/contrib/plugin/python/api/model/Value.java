@@ -8,7 +8,7 @@ import com.buschmais.xo.neo4j.api.annotation.Property;
  * Represents a primitive value.
  */
 @Label("Value")
-public interface PrimitiveValue extends PythonSourceCode, ValueDescriptor<Object> {
+public interface Value extends Python, ValueDescriptor<Object> {
 
     @Property("value")
     @Override

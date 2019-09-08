@@ -1,6 +1,6 @@
 package org.jqassistant.contrib.plugin.python.api.model;
 
-import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
+import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
 
@@ -10,14 +10,13 @@ import java.util.Set;
 import static com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 
 /**
- * Describes an object.
+ * Describes the properties that Files, Classes and Methods have in common.
  */
-@Label(value = "Object", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface ObjectDescriptor extends PackageMember {
-
+@Label(value = "Definable")
+public interface Definable extends Python, Descriptor {
     @Incoming
-    @Defines
-    ObjectDescriptor getDeclaringObject();
+    @Contains
+    Object getParentObject();
 
     /**
      * Return the declared inner classes.
@@ -25,8 +24,8 @@ public interface ObjectDescriptor extends PackageMember {
      * @return The declared inner classes.
      */
     @Outgoing
-    @Defines
-    Set<ObjectDescriptor> getDeclaredInnerClasses();
+    @Contains
+    Set<Class> getContainedClasses();
 
     /**
      * Return the declared methods.
@@ -35,7 +34,16 @@ public interface ObjectDescriptor extends PackageMember {
      */
     @Outgoing
     @Defines
-    List<Method> getDeclaredMethods();
+    List<Method> getDefinedMethods();
+
+    /**
+     * Return the declared methods.
+     *
+     * @return The declared methods.
+     */
+    @Outgoing
+    @Calls
+    List<Method> getCalledMethods();
 
     /**
      * Return the declared variables.

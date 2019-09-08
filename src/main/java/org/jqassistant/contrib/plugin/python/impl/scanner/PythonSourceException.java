@@ -3,7 +3,7 @@ package org.jqassistant.contrib.plugin.python.impl.scanner;
 /**
  * This exception is thrown if something goes wrong while solving parsed types.
  * It is caught in
- * {@link org.jqassistant.contrib.plugin.python.impl.scanner.PythonSourceFileScannerPlugin}.
+ * {@link PythonFileScannerPlugin}.
  * 
  * @author Kevin M. Shrestha
  *

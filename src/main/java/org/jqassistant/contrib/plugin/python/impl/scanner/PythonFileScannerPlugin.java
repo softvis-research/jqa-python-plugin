@@ -13,11 +13,11 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
-import org.jqassistant.contrib.plugin.python.api.model.Package;
-import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
+import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
+import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
 import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
-import org.jqassistant.contrib.plugin.python.impl.scanner.visitor.StoreHelper;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.PythonSourceWalker;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.StoreHelper;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.WalkerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,8 @@ import java.io.InputStream;
  * @author Kevin M. Shrestha
  */
 @Requires(FileDescriptor.class)
-public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileResource, PythonSourceFile> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PythonSourceFileScannerPlugin.class);
+public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource, PythonFile> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PythonFileScannerPlugin.class);
 
     @Override
     public boolean accepts(FileResource item, String path, Scope scope) {
@@ -41,17 +41,19 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
     }
 
     @Override
-    public PythonSourceFile scan(FileResource item, String path, Scope scope, Scanner scanner) throws IOException {
+    public PythonFile scan(FileResource item, String path, Scope scope, Scanner scanner) throws IOException {
         final ScannerContext scannerContext = scanner.getContext();
         final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
-        final PythonSourceFile pythonSourceFile = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonSourceFile.class);
-//        final Package packageDescriptor = scannerContext.getStore().addDescriptorType(fileDescriptor, Package.class);
-        final StoreHelper storeHelper = new StoreHelper(scannerContext, pythonSourceFile);
-        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, pythonSourceFile, storeHelper);
+        final PythonPackage packageDescriptor = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonPackage.class);
+        final PythonFile pythonFile = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonFile.class);
+        packageDescriptor.getContains().add(pythonFile);
+        Object parentObject = pythonFile.getParentObject();
+        System.out.println(parentObject);
+
+        final StoreHelper storeHelper = new StoreHelper(packageDescriptor, pythonFile, scannerContext);
+        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, storeHelper);
 
         try (final InputStream inputStream = item.createStream()) {
-            pythonSourceFile.setFileName(item.getFile().getName());
-//            packageDescriptor.setFileName(item.getFile().getName());
 
             final Python3Lexer lexer = new Python3Lexer(CharStreams.fromStream(inputStream));
             final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
@@ -59,12 +61,11 @@ public class PythonSourceFileScannerPlugin extends AbstractScannerPlugin<FileRes
 
             File_inputContext tree = parser.file_input();
 
-//            tree.accept(new VariableVisitor(visitorHelper));
-            ParseTreeWalker.DEFAULT.walk(new PythonSourceWalker(pythonSourceFile, walkerHelper), tree);
+            ParseTreeWalker.DEFAULT.walk(new PythonSourceWalker(walkerHelper), tree);
         } catch (PythonSourceException pse) {
-            LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonSourceFile.getFileName());
+            LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonFile.getFileName());
         }
 
-        return pythonSourceFile;
+        return pythonFile;
     }
 }

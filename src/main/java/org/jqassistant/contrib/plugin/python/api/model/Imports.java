@@ -5,15 +5,14 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
 import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 
-
 @Relation("IMPORTS")
 public interface Imports extends Descriptor {
 
     @Incoming
-    ObjectDescriptor getDependency();
+    Definable getDependency();
 
     @Outgoing
-    ObjectDescriptor getDependent();
+    Definable getDependent();
 
     Integer getWeight();
 

@@ -3,7 +3,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3BaseListener;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Lexer;
@@ -14,11 +13,11 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.ParametersCont
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.VarargslistContext;
 import org.junit.Before;
 import org.junit.Test;
-import org.python.antlr.Visitor;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 public class ANTLRTest {
 

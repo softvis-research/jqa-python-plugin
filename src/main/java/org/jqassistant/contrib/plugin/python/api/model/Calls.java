@@ -1,20 +1,17 @@
 package org.jqassistant.contrib.plugin.python.api.model;
 
-import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
-import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
-import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Defines an CALLS relation between two methods.
+ * Defines the defines relation used for variables, methods and inner classes.
  */
 @Relation("CALLS")
-public interface Calls extends Descriptor, LineNumber {
-
-    @Outgoing
-    Method getCallingMethod();
-
-    @Incoming
-    Method getCalledMethod();
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Calls {
 }

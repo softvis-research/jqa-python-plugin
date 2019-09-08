@@ -10,5 +10,4 @@ public interface Signature {
     String getSignature();
 
     void setSignature(String signature);
-
 }

@@ -1,12 +1,11 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.python.core.PyCode;
-import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+
+//import org.python.core.PyCode;
+//import org.python.core.PyObject;
+//import org.python.util.PythonInterpreter;
 
 public class JythonTest {
     private String exampleFilePath;
@@ -24,17 +23,17 @@ public class JythonTest {
     }
     @Test
     public void testParse() throws IOException {
-        Reader reader = new FileReader(exampleFilePath);
-
-        PythonInterpreter interpreter = new PythonInterpreter();
-
-        interpreter.exec("import ast");
-        PyObject o = interpreter.eval("ast.dump(ast.parse('" + exampleFilePath + "', 'filename', 'eval'))" + "\n");
-        System.out.print(o.toString());
-
-        System.out.println(ANSI_RED + "\n---------------------------------------------------------------" + ANSI_RESET);
-        final PyCode compile = interpreter.compile(reader);
-        System.out.println(compile);
+//        Reader reader = new FileReader(exampleFilePath);
+//
+//        PythonInterpreter interpreter = new PythonInterpreter();
+//
+//        interpreter.exec("import ast");
+//        PyObject o = interpreter.eval("ast.dump(ast.parse('" + exampleFilePath + "', 'filename', 'eval'))" + "\n");
+//        System.out.print(o.toString());
+//
+//        System.out.println(ANSI_RED + "\n---------------------------------------------------------------" + ANSI_RESET);
+//        final PyCode compile = interpreter.compile(reader);
+//        System.out.println(compile);
     }
 
     private void columnPrint(String ruleIndex, String ruleName, String source, int indentDepth) {

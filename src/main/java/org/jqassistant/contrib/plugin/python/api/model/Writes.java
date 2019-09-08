@@ -1,20 +1,17 @@
 package org.jqassistant.contrib.plugin.python.api.model;
 
-import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
-import com.buschmais.xo.neo4j.api.annotation.Relation.Incoming;
-import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Defines a WRITES relation between a method and a field.
+ * Defines the defines relation used for variables, methods and inner classes.
  */
 @Relation("WRITES")
-public interface Writes extends Descriptor, LineNumber {
-
-    @Outgoing
-    Method getMethod();
-
-    @Incoming
-    Variable getField();
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Writes {
 }

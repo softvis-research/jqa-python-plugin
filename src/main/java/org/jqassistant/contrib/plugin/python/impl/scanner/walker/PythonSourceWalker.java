@@ -1,11 +1,10 @@
 package org.jqassistant.contrib.plugin.python.impl.scanner.walker;
 
-import com.buschmais.jqassistant.core.store.api.model.Descriptor;
+import lombok.AllArgsConstructor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3BaseListener;
-import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.And_exprContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.And_testContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.AnnassignContext;
@@ -92,18 +91,14 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Xor_exprContex
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_argContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_exprContext;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_stmtContext;
-import org.jqassistant.contrib.plugin.python.api.model.PythonSourceFile;
 
+@AllArgsConstructor
 public class PythonSourceWalker extends Python3BaseListener {
-    protected PythonSourceFile pythonSourceFile;
-    protected WalkerHelper walkerHelper;
-    protected Descriptor descriptor;
+    private WalkerHelper walkerHelper;
 
-
-    public PythonSourceWalker(final PythonSourceFile pythonSourceFile, final WalkerHelper walkerHelper) {
-        this.pythonSourceFile = pythonSourceFile;
-        this.walkerHelper = walkerHelper;
-    }
+//    public PythonSourceWalker(final WalkerHelper walkerHelper) {
+//        this.walkerHelper = walkerHelper;
+//    }
 
     @Override
     public void enterSingle_input(final Single_inputContext ctx) {
@@ -117,7 +112,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterFile_input(final File_inputContext ctx) {
-        walkerHelper.createFile(pythonSourceFile, ctx);
+        walkerHelper.createFile(ctx);
     }
 
     @Override
@@ -177,7 +172,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterFuncdef(final FuncdefContext ctx) {
-        walkerHelper.createFunction(pythonSourceFile, ctx);
+        walkerHelper.createFunction(ctx);
     }
 
     @Override
@@ -187,7 +182,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterParameters(final ParametersContext ctx) {
-        walkerHelper.createParameters(pythonSourceFile, ctx);
+        walkerHelper.createParameters(ctx);
     }
 
     @Override
@@ -387,7 +382,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterImport_stmt(final Import_stmtContext ctx) {
-        walkerHelper.createImport(pythonSourceFile, ctx);
+        walkerHelper.createImport(ctx);
     }
 
     @Override
@@ -878,7 +873,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterClassdef(final ClassdefContext ctx) {
-        walkerHelper.createClass(pythonSourceFile, ctx);
+        walkerHelper.createClass(ctx);
     }
 
     @Override

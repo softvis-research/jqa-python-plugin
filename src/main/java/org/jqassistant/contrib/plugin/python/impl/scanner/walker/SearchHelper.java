@@ -1,16 +1,12 @@
-package org.jqassistant.contrib.plugin.python.impl.scanner.visitor;
-
-import java.util.Map;
-import java.util.Set;
+package org.jqassistant.contrib.plugin.python.impl.scanner.walker;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
 
-import com.buschmais.jqassistant.core.store.api.model.Descriptor;
+import java.util.Set;
 
 public class SearchHelper {
 
@@ -32,13 +28,13 @@ public class SearchHelper {
         return backupName.isEmpty() ? backupName : "null"; //if symbol 40 is not found
     }
 
-    public static ImmutablePair<ParserRuleContext, Descriptor> findParentInCache(StoreHelper storeHelper, ParserRuleContext ctx, RuleIndex parentRuleIndex) {
+    public static ContextEntity findParentInCache(StoreHelper storeHelper, ParserRuleContext ctx, RuleIndex parentRuleIndex) {
         if (parentRuleIndex != RuleIndex.ANY) {
             return findParentByRuleIndex(storeHelper, ctx, parentRuleIndex.getValue());
         }
         Set<Integer> cacheKeySet = storeHelper.getCacheKeySet();
         for (Integer integer : cacheKeySet) {
-            ImmutablePair<ParserRuleContext, Descriptor> parent = findParentByRuleIndex(storeHelper, ctx, integer);
+            ContextEntity parent = findParentByRuleIndex(storeHelper, ctx, integer);
             if (parent != null) {
                 return parent;
             }
@@ -47,10 +43,10 @@ public class SearchHelper {
         return null;
     }
 
-    public static ImmutablePair<ParserRuleContext, Descriptor> findParentByRuleIndex(StoreHelper storeHelper, ParserRuleContext ctx, int parentRuleIndex) {
-        Set<ImmutablePair<ParserRuleContext, Descriptor>> allObjects = storeHelper.getCacheByRuleIndex(parentRuleIndex);
-        for (ImmutablePair<ParserRuleContext, Descriptor> pair: allObjects) {
-            ImmutablePair<ParserRuleContext, Descriptor> parent = recursiveFindParent(ctx, pair);
+    public static ContextEntity findParentByRuleIndex(StoreHelper storeHelper, ParserRuleContext ctx, int parentRuleIndex) {
+        ContextEntityCache cache = storeHelper.getCacheByRuleIndex(parentRuleIndex);
+        for (ContextEntity ce: cache) {
+            ContextEntity parent = recursiveFindParent(ctx, ce);
             if (parent != null) {
                 return parent;
             }
@@ -58,20 +54,18 @@ public class SearchHelper {
         return null;
     }
 
-    private static ImmutablePair<ParserRuleContext, Descriptor> recursiveFindParent(
-            ParserRuleContext ctx,
-            ImmutablePair<ParserRuleContext, Descriptor> pair) {
+    private static ContextEntity recursiveFindParent(ParserRuleContext ctx, ContextEntity ce) {
 
         ParserRuleContext parent = ctx.getParent();
         if (parent == null) {
             return null;
         }
 
-        ParserRuleContext searchCtx = pair.getLeft();
+        ParserRuleContext searchCtx = ce.getLeft();
         if (parent == searchCtx) {
-            return pair;
+            return ce;
         }
 
-        return recursiveFindParent(parent, pair);
+        return recursiveFindParent(parent, ce);
     }
 }

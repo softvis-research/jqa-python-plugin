@@ -13,12 +13,7 @@ import java.util.List;
  * Describes a method.
  */
 @Label(value = "Method")
-public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
-
-    @Defines
-    @Incoming
-    ObjectDescriptor getDeclaringObject();
-
+public interface Method extends Python, Definable, NamedDescriptor, Signature {
     /**
      * Return all declared parameters of this method.
      *
@@ -26,16 +21,6 @@ public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
      */
     @Relation("HAS")
     List<Parameter> getParameters();
-
-    /**
-     * Return the return type of this method.
-     *
-     * @return The return type.
-     */
-    @Relation("RETURNS")
-    ObjectDescriptor getReturns();
-
-    void setReturns(ObjectDescriptor returns);
 
     @Relation("HAS_DEFAULT")
     ValueDescriptor<?> getHasDefault();
@@ -48,7 +33,7 @@ public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
      * @return The declared throwables.
      */
     @Relation("RAISES")
-    List<ObjectDescriptor> getDeclaredThrowables();
+    List<Exception> getDeclaredThrowables();
 
     /**
      * Return all read accesses to fields this method performs.
@@ -56,7 +41,8 @@ public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
      * @return All read accesses to fields this method performs.
      */
     @Outgoing
-    List<Reads> getReads();
+    @Reads
+    List<Definable> getReads();
 
     /**
      * Return all write accesses to fields this method performs.
@@ -64,15 +50,8 @@ public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
      * @return All write accesses to fields this method performs.
      */
     @Outgoing
-    List<Writes> getWrites();
-
-    /**
-     * Return all invocations this method performs.
-     *
-     * @return All invocations this method performs.
-     */
-    @Outgoing
-    List<Calls> getCalls();
+    @Writes
+    List<Definable> getWrites();
 
     /**
      * Return all invocations of this method by other methods.
@@ -80,24 +59,13 @@ public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
      * @return The invocations of this method by other methods.
      */
     @Incoming
-    List<Calls> getCalledBy();
+    @Calls
+    List<PythonFile> getCalledBy();
 
-    @Defines
     @Outgoing
+    @Defines
     List<Variable> getVariables();
 
-    /**
-     * Return the cyclomatic complexity of the method.
-     *
-     * @return The cyclomatic complexity.
-     */
-    int getCyclomaticComplexity();
-
-    void setCyclomaticComplexity(int cyclomaticComplexity);
-
-//    @Declares
-//    @Outgoing
-//    List<ObjectDescriptor> getDeclaredInnerClasses();
 
     /**
      * Return the first line number of the method.
@@ -125,5 +93,4 @@ public interface Method extends PythonSourceCode, Signature, NamedDescriptor {
     int getEffectiveLineCount();
 
     void setEffectiveLineCount(int effectiveLineCount);
-
 }

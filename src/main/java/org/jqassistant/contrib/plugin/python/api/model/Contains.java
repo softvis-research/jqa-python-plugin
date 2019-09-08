@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 /**
  * Defines the defines relation used for variables, methods and inner classes.
  */
-@Relation("READS")
+@Relation("CONTAINS")
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Reads {
+public @interface Contains {
 }
