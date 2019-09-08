@@ -85,9 +85,12 @@ public class WalkerHelper {
         object.setName(SearchHelper.findNameToken(ctx));
 
         ContextEntity parentCe = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
+//        if (parentCe != null) {
+//            parentCe.allocateChild(object, ctx);
+//        }
         if (parentCe != null) {
             ParserRuleContext c = parentCe.getContext();
-            if (c.getRuleIndex() == RuleIndex.FILE.getValue()) {
+            if (parentCe.isPythonFile()) {
                 PythonFile e = (PythonFile) parentCe.getEntity();
                 object.setSourceFileName(e.getFileName());
                 e.getContainedClasses().add(object);

@@ -19,6 +19,7 @@ import java.util.TreeMap;
  */
 @AllArgsConstructor
 public class StoreHelper {
+    private String fqn;
     private PythonPackage packageDescriptor;
     private PythonFile pythonFile;
     private ScannerContext scannerContext;
@@ -31,14 +32,31 @@ public class StoreHelper {
         this.pythonFile = pythonFile;
         this.scannerContext = scannerContext;
 
-        cache.put(this.packageDescriptor.getName(), new RuleCache());
+        this.fqn = packageDescriptor.getName();
+
+        cache.put(fqn, new RuleCache());
     }
+
+//    public <T extends Descriptor> T createAndCache(Class<T> fileClass, ParserRuleContext ctx) {
+//        T storeObject = scannerContext.getStore().create(fileClass);
+//        int ruleIndex = ctx.getRuleIndex();
+//
+//        RuleCache ruleCache = cache.get(fqn);
+//        if (!ruleCache.containsKey(ruleIndex)) {
+//            ruleCache.put(ruleIndex, new ContextEntityCache());
+//        }
+//        ContextEntityCache contextEntityCache = ruleCache.get(ruleIndex);
+//
+//        contextEntityCache.add(new ContextEntity(ctx, storeObject));
+//
+//        return storeObject;
+//    }
 
     public <T extends Descriptor> T createAndCache(Class<T> fileClass, ParserRuleContext ctx) {
         T storeObject = scannerContext.getStore().create(fileClass);
         int ruleIndex = ctx.getRuleIndex();
 
-        RuleCache ruleCache = cache.get(pythonFile.getName());
+        RuleCache ruleCache = cache.get(fqn);
         if (!ruleCache.containsKey(ruleIndex)) {
             ruleCache.put(ruleIndex, new ContextEntityCache());
         }
@@ -49,13 +67,19 @@ public class StoreHelper {
         return storeObject;
     }
 
-    public ContextEntityCache getCacheByRuleIndex(int ruleIndex) {
-        RuleCache ruleCache = cache.get(pythonFile.getName());
+    public ContextEntityCache getCacheByRuleIndex(String fqn, int ruleIndex) {
+        if (fqn.isEmpty()) {
+            fqn = this.fqn;
+        }
+        RuleCache ruleCache = cache.get(fqn);
         return ruleCache.get(ruleIndex);
     }
 
-    public Set<Integer> getCacheKeySet() {
-        return cache.get(pythonFile.getName()).keySet();
+    public Set<Integer> getCacheKeySet(String fqn) {
+        if (fqn.isEmpty()) {
+            fqn = this.fqn;
+        }
+        return cache.get(fqn).keySet();
     }
 }
 

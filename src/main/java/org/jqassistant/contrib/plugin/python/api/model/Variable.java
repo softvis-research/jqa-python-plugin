@@ -13,14 +13,9 @@ import java.util.List;
  */
 @Label(value = "Variable")
 public interface Variable extends Python, NamedDescriptor, Signature {
-
     @Defines
     @Incoming
-    Object getDeclaringObject();
-
-    @Defines
-    @Incoming
-    Method getDeclaringMethod();
+    Definable getDeclaringObject();
 
     @Incoming
     @Writes

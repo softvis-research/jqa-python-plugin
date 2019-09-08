@@ -32,7 +32,7 @@ public class SearchHelper {
         if (parentRuleIndex != RuleIndex.ANY) {
             return findParentByRuleIndex(storeHelper, ctx, parentRuleIndex.getValue());
         }
-        Set<Integer> cacheKeySet = storeHelper.getCacheKeySet();
+        Set<Integer> cacheKeySet = storeHelper.getCacheKeySet("");
         for (Integer integer : cacheKeySet) {
             ContextEntity parent = findParentByRuleIndex(storeHelper, ctx, integer);
             if (parent != null) {
@@ -44,7 +44,7 @@ public class SearchHelper {
     }
 
     public static ContextEntity findParentByRuleIndex(StoreHelper storeHelper, ParserRuleContext ctx, int parentRuleIndex) {
-        ContextEntityCache cache = storeHelper.getCacheByRuleIndex(parentRuleIndex);
+        ContextEntityCache cache = storeHelper.getCacheByRuleIndex("", parentRuleIndex);
         for (ContextEntity ce: cache) {
             ContextEntity parent = recursiveFindParent(ctx, ce);
             if (parent != null) {
@@ -61,7 +61,7 @@ public class SearchHelper {
             return null;
         }
 
-        ParserRuleContext searchCtx = ce.getLeft();
+        ParserRuleContext searchCtx = ce.getContext();
         if (parent == searchCtx) {
             return ce;
         }
