@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<testsuite name="jQAssistant-jqassistant-contrib-package_Default" tests="1" failures="0" errors="0" time="0.0">
-    <testcase name="Constraint_jqassistant-contrib-package_PackagesMustHaveGroupIdPrefix" time="0.0" classname="jQAssistant-jqassistant-contrib-package_Default"/>
-</testsuite>

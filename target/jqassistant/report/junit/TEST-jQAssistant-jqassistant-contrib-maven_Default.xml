@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<testsuite name="jQAssistant-jqassistant-contrib-maven_Default" tests="5" failures="0" errors="0" time="1.0">
-    <testcase name="Constraint_jqassistant-contrib-maven_MavenModulesMustUseParentGroupId" time="0.0" classname="jQAssistant-jqassistant-contrib-maven_Default"/>
-    <testcase name="Concept_jqassistant-contrib-maven_ParentProject" time="0.0" classname="jQAssistant-jqassistant-contrib-maven_Default"/>
-    <testcase name="Constraint_jqassistant-contrib-maven_ParentProjectMustDefineUrl" time="0.0" classname="jQAssistant-jqassistant-contrib-maven_Default"/>
-    <testcase name="Constraint_jqassistant-contrib-maven_ParentProjectMustDefineDeveloper" time="0.0" classname="jQAssistant-jqassistant-contrib-maven_Default"/>
-    <testcase name="Constraint_jqassistant-contrib-maven_GroupId" time="0.0" classname="jQAssistant-jqassistant-contrib-maven_Default"/>
-</testsuite>
