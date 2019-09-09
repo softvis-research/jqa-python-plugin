@@ -3,7 +3,8 @@ package org.jqassistant.contrib.plugin.python.impl.scanner;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 
 public enum RuleIndex {
-    ANY              (-1                               ),
+    ANY              (null                             ),
+    PACKAGE          (-1                               ),
     FILE             (Python3Parser.RULE_file_input    ),
     METHOD           (Python3Parser.RULE_funcdef       ),
     PARAMETER        (Python3Parser.RULE_parameters    ),

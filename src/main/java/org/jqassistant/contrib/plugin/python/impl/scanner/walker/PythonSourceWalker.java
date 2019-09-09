@@ -96,10 +96,6 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.Yield_stmtCont
 public class PythonSourceWalker extends Python3BaseListener {
     private WalkerHelper walkerHelper;
 
-//    public PythonSourceWalker(final WalkerHelper walkerHelper) {
-//        this.walkerHelper = walkerHelper;
-//    }
-
     @Override
     public void enterSingle_input(final Single_inputContext ctx) {
         super.enterSingle_input(ctx);

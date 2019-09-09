@@ -1,5 +1,7 @@
 package org.jqassistant.contrib.plugin.python.impl.scanner.walker;
 
+import java.util.Optional;
+
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -8,26 +10,28 @@ import org.jqassistant.contrib.plugin.python.api.model.Class;
 import org.jqassistant.contrib.plugin.python.api.model.Method;
 import org.jqassistant.contrib.plugin.python.api.model.Parameter;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
+import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
 import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class WalkerHelper {
     private ScannerContext scannerContext;
     private StoreHelper storeHelper;
-
-    public WalkerHelper(ScannerContext scannerContext, StoreHelper storeHelper) {
-        this.scannerContext = scannerContext;
-        this.storeHelper = storeHelper;
-    }
-
-    public ScannerContext getScannerContext() {
-        return scannerContext;
-    }
 
     public void createFile(Python3Parser.File_inputContext ctx) {
         PythonFile object = storeHelper.createAndCache(PythonFile.class, ctx);
         object.setFileName(ctx.getText());
 
-        ParseTree import_stmt = searchChildrenForStringText(ctx, "import_stmt");
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.PACKAGE);
+        if (parentInCache.isPresent()) {
+            Optional<PythonPackage> optional = parentInCache.get().getPythonPackage();
+            if (optional.isPresent()) {
+                PythonPackage pythonPackage = optional.get();
+                pythonPackage.getContains().add(object);
+            }
+        }
     }
 
     private ParseTree searchChildrenForStringText(Python3Parser.File_inputContext ctx, String searchString) {
@@ -44,12 +48,12 @@ public class WalkerHelper {
     public void createParameters(final Python3Parser.ParametersContext ctx) {
         Parameter object = storeHelper.createAndCache(Parameter.class, ctx);
         object.setName(SearchHelper.findNameToken(ctx));
-        ContextEntity parentCe = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.METHOD);
-        if (parentCe != null) {
-            ParserRuleContext c = parentCe.getContext();
-            if (c.getRuleIndex() == RuleIndex.METHOD.getValue()) {
-                Method e = (Method) parentCe.getEntity();
-                e.getParameters().add(object);
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.METHOD);
+        if (parentInCache.isPresent()) {
+            Optional<Method> opt = parentInCache.get().getMethod();
+            if (opt.isPresent()) {
+                Method method = opt.get();
+                method.getParameters().add(object);
             }
         } else {
             System.out.println("parent not found");
@@ -59,8 +63,8 @@ public class WalkerHelper {
     public void createFunction(final Python3Parser.FuncdefContext ctx) {
         Method object = storeHelper.createAndCache(Method.class, ctx);
         object.setName(SearchHelper.findNameToken(ctx));
-        ContextEntity parentCe = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
-        if (parentCe != null) {
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
+        if (parentInCache.isPresent()) {
             ParserRuleContext c = parentCe.getContext();
             if (c.getRuleIndex() == RuleIndex.FILE.getValue()) {
                 PythonFile e = (PythonFile) parentCe.getEntity();
@@ -84,11 +88,11 @@ public class WalkerHelper {
         Class object = storeHelper.createAndCache(Class.class, ctx);
         object.setName(SearchHelper.findNameToken(ctx));
 
-        ContextEntity parentCe = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
-//        if (parentCe != null) {
-//            parentCe.allocateChild(object, ctx);
-//        }
-        if (parentCe != null) {
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
+        if (parentInCache.isPresent()) {
+            parentCe.allocateChild(object, ctx);
+        }
+        if (parentInCache.isPresent()) {
             ParserRuleContext c = parentCe.getContext();
             if (parentCe.isPythonFile()) {
                 PythonFile e = (PythonFile) parentCe.getEntity();

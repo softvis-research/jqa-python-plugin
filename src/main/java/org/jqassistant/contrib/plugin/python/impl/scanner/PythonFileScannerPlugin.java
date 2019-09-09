@@ -44,13 +44,11 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
     public PythonFile scan(FileResource item, String path, Scope scope, Scanner scanner) throws IOException {
         final ScannerContext scannerContext = scanner.getContext();
         final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
-        final PythonPackage packageDescriptor = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonPackage.class);
+        final PythonPackage pythonPackage = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonPackage.class);
         final PythonFile pythonFile = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonFile.class);
-        packageDescriptor.getContains().add(pythonFile);
-        Object parentObject = pythonFile.getParentObject();
-        System.out.println(parentObject);
+        pythonPackage.getContains().add(pythonFile);
 
-        final StoreHelper storeHelper = new StoreHelper(packageDescriptor, pythonFile, scannerContext);
+        final StoreHelper storeHelper = new StoreHelper(pythonPackage, pythonFile, scannerContext);
         final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, storeHelper);
 
         try (final InputStream inputStream = item.createStream()) {

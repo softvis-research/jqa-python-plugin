@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
+import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,25 +33,15 @@ public class StoreHelper {
         this.pythonFile = pythonFile;
         this.scannerContext = scannerContext;
 
-        this.fqn = packageDescriptor.getName();
+        this.fqn = packageDescriptor.getFileName();
+        RuleCache ruleCache = new RuleCache();
+        ContextEntityCache contextEntities = new ContextEntityCache();
+        ContextEntity packageCE = new ContextEntity(null, packageDescriptor);
+        contextEntities.add(packageCE);
+        ruleCache.put(RuleIndex.PACKAGE.getValue(), contextEntities);
 
-        cache.put(fqn, new RuleCache());
+        cache.put(fqn, ruleCache);
     }
-
-//    public <T extends Descriptor> T createAndCache(Class<T> fileClass, ParserRuleContext ctx) {
-//        T storeObject = scannerContext.getStore().create(fileClass);
-//        int ruleIndex = ctx.getRuleIndex();
-//
-//        RuleCache ruleCache = cache.get(fqn);
-//        if (!ruleCache.containsKey(ruleIndex)) {
-//            ruleCache.put(ruleIndex, new ContextEntityCache());
-//        }
-//        ContextEntityCache contextEntityCache = ruleCache.get(ruleIndex);
-//
-//        contextEntityCache.add(new ContextEntity(ctx, storeObject));
-//
-//        return storeObject;
-//    }
 
     public <T extends Descriptor> T createAndCache(Class<T> fileClass, ParserRuleContext ctx) {
         T storeObject = scannerContext.getStore().create(fileClass);
