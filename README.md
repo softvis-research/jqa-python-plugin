@@ -29,7 +29,7 @@ Requirements:
 git clone https://github.com/softvis-research/jqa-python-plugin
 cd jqa-python-plugin
 mvn clean install
-jqassistant:scan -f <file or directory path>
+mvn jqassistant:scan -f <file or directory path>
 ```
 
 ## Model
