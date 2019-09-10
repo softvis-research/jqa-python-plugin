@@ -15,7 +15,6 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
-import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.PythonSourceWalker;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.StoreHelper;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.WalkerHelper;
@@ -37,7 +36,7 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
     @Override
     public boolean accepts(FileResource item, String path, Scope scope) {
         LOGGER.debug("item, path, scope: " + item + ",\t" + path + ", \t" + scope);
-        return PythonScope.SRC.equals(scope) && path.toLowerCase().endsWith(".py");
+        return path.toLowerCase().endsWith(".py");
     }
 
     @Override
