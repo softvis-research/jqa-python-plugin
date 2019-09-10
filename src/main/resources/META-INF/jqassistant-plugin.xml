@@ -1,5 +1,6 @@
-<jqa-plugin:jqassistant-plugin name="XML"
-                               xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.4">
+<jqa-plugin:jqassistant-plugin
+        name="Python"
+        xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.4">
     <description>Provides scanners for Source Code (currently Python).</description>
     <model>
         <class>org.jqassistant.contrib.plugin.python.api.model.PythonClass</class>
