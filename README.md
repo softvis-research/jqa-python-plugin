@@ -10,7 +10,7 @@ Next download the latest version from the release tab. Put the `jqa-python-plugi
  line tool.
 
 ```bash
-the plugin is not detected currently by jqassistant-commandline, sorry! but this is how it may be used in the future:
+the plugin currently does not execute correctly when run by jqassistant-commandline, sorry! but this is how it may be used in the future:
 
 jqassistant-commandline-neo4jv3-1.6.0/bin/jqassistant.sh scan -f <file or directory path>
 ```
@@ -21,7 +21,7 @@ You can then start a local Neo4j server to start querying the database at [http:
 jqassistant-commandline-neo4jv3-1.6.0/bin/jqassistant.sh server
 ```
 
-## Alternative Getting Started
+## Build
 Requirements:
 * Java 8 
 * Maven
@@ -29,7 +29,6 @@ Requirements:
 git clone https://github.com/softvis-research/jqa-python-plugin
 cd jqa-python-plugin
 mvn clean install
-mvn jqassistant:scan -f <file or directory path>
 ```
 
 ## Model
