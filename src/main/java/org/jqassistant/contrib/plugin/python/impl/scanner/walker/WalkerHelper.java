@@ -1,19 +1,17 @@
 package org.jqassistant.contrib.plugin.python.impl.scanner.walker;
 
-import java.util.Optional;
-
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
+import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
+import lombok.AllArgsConstructor;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
-import org.jqassistant.contrib.plugin.python.api.model.Class;
 import org.jqassistant.contrib.plugin.python.api.model.Method;
 import org.jqassistant.contrib.plugin.python.api.model.Parameter;
+import org.jqassistant.contrib.plugin.python.api.model.PythonClass;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
 import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
 
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class WalkerHelper {
@@ -21,84 +19,64 @@ public class WalkerHelper {
     private StoreHelper storeHelper;
 
     public void createFile(Python3Parser.File_inputContext ctx) {
-        PythonFile object = storeHelper.createAndCache(PythonFile.class, ctx);
-        object.setFileName(ctx.getText());
+        FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
+        PythonFile pythonFile = storeHelper.createAndCache(PythonFile.class, ctx, fileDescriptor);
+
+        storeHelper.cacheFile(pythonFile, ctx);
+        pythonFile.setFullQualifiedName(storeHelper.getPythonPackage().getFileName());
+        pythonFile.setName(fileDescriptor.getFileName());
+        storeHelper.getPythonPackage().getContains().add(pythonFile);
 
         Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.PACKAGE);
         if (parentInCache.isPresent()) {
-            Optional<PythonPackage> optional = parentInCache.get().getPythonPackage();
-            if (optional.isPresent()) {
-                PythonPackage pythonPackage = optional.get();
-                pythonPackage.getContains().add(object);
-            }
+            Optional<PythonPackage> opt = parentInCache.get().getPythonPackage();
+            opt.ifPresent(parent -> parent.getContains().add(pythonFile));
         }
-    }
 
-    private ParseTree searchChildrenForStringText(Python3Parser.File_inputContext ctx, String searchString) {
-        final int childCount = ctx.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            ParseTree child = ctx.getChild(i);
-            if (child.getText().equals(searchString)) {
-                return child;
-            }
-        }
-        return null;
+        storeHelper.setPythonFile(pythonFile);
     }
 
     public void createParameters(final Python3Parser.ParametersContext ctx) {
-        Parameter object = storeHelper.createAndCache(Parameter.class, ctx);
+        Parameter object = storeHelper.createAndCache(Parameter.class, ctx, null);
         object.setName(SearchHelper.findNameToken(ctx));
         Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.METHOD);
         if (parentInCache.isPresent()) {
             Optional<Method> opt = parentInCache.get().getMethod();
-            if (opt.isPresent()) {
-                Method method = opt.get();
-                method.getParameters().add(object);
-            }
+            opt.ifPresent(parent -> parent.getParameters().add(object));
         } else {
             System.out.println("parent not found");
         }
     }
 
     public void createFunction(final Python3Parser.FuncdefContext ctx) {
-        Method object = storeHelper.createAndCache(Method.class, ctx);
+        Method object = storeHelper.createAndCache(Method.class, ctx, null);
         object.setName(SearchHelper.findNameToken(ctx));
         Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
         if (parentInCache.isPresent()) {
-            ParserRuleContext c = parentCe.getContext();
-            if (c.getRuleIndex() == RuleIndex.FILE.getValue()) {
-                PythonFile e = (PythonFile) parentCe.getEntity();
-                e.getDefinedMethods().add(object);
-            }
-            if (c.getRuleIndex() == RuleIndex.CLASS.getValue()) {
-                Class e = (Class) parentCe.getEntity();
-                e.getDefinedMethods().add(object);
-            }
+            Optional<PythonFile> opt = parentInCache.get().getPythonFile();
+            opt.ifPresent(parent -> parent.getDefinedMethods().add(object));
+
+            Optional<PythonClass> opt2 = parentInCache.get().getPythonClass();
+            opt2.ifPresent(parent -> parent.getDefinedMethods().add(object));
         } else {
             System.out.println("parent not found");
         }
     }
 
     public void createImport(Python3Parser.Import_stmtContext ctx) {
-//        PythonSourceFile object = storeHelper.createAndCache(PythonSourceFile.class, ctx);
+//        PythonSourceFile object = storeHelper.createAndCache(PythonSourceFile.class, ctx, null);
 //        pythonSourceFile.getImports().add(object); //TODO: find correct import type
     }
 
     public void createClass(Python3Parser.ClassdefContext ctx) {
-        Class object = storeHelper.createAndCache(Class.class, ctx);
+        PythonClass object = storeHelper.createAndCache(PythonClass.class, ctx, null);
         object.setName(SearchHelper.findNameToken(ctx));
 
         Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
         if (parentInCache.isPresent()) {
-            parentCe.allocateChild(object, ctx);
-        }
-        if (parentInCache.isPresent()) {
-            ParserRuleContext c = parentCe.getContext();
-            if (parentCe.isPythonFile()) {
-                PythonFile e = (PythonFile) parentCe.getEntity();
-                object.setSourceFileName(e.getFileName());
-                e.getContainedClasses().add(object);
-            }
+            Optional<PythonFile> opt = parentInCache.get().getPythonFile();
+            opt.ifPresent(parent -> parent.getContainedClasses().add(object));
+            opt.ifPresent(parent -> object.setSourceFileName(parent.getFileName()));
         } else {
             System.out.println("parent not found");
         }

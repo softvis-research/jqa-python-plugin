@@ -2,7 +2,7 @@
                                xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.4">
     <description>Provides scanners for Source Code (currently Python).</description>
     <model>
-        <class>org.jqassistant.contrib.plugin.python.api.model.Class</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonClass</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Constructor</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Imports</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Method</class>
@@ -19,7 +19,7 @@
         <class>org.jqassistant.contrib.plugin.python.api.scanner.PythonScope</class>
     </scope>
     <scanner>
-        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PackageScannerPlugin</class>
+        <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonPackageScannerPlugin</class>
         <class>org.jqassistant.contrib.plugin.python.impl.scanner.PythonFileScannerPlugin</class>
     </scanner>
 </jqa-plugin:jqassistant-plugin>

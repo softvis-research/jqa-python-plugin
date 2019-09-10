@@ -6,7 +6,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label(value = "Class", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface Class extends Python, NamedDescriptor, Definable {
+public interface PythonClass extends Python, NamedDescriptor, Definable {
 
     /**
      * Return the super class.
@@ -14,7 +14,7 @@ public interface Class extends Python, NamedDescriptor, Definable {
      * @return The super class.
      */
     @Relation("INHERITS")
-    Class getSuperClass();
+    PythonClass getSuperClass();
 
     /**
      * Set the super class.
@@ -22,7 +22,7 @@ public interface Class extends Python, NamedDescriptor, Definable {
      * @param superClass
      *            The super class.
      */
-    void setSuperClass(Class superClass);
+    void setSuperClass(PythonClass superClass);
 
     /**
      * Return the name of the source file.

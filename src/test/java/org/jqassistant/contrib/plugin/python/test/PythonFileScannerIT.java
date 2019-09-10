@@ -19,10 +19,7 @@ public class PythonFileScannerIT extends AbstractPluginIT {
         final String FILE_PATH = "src/test/resources/example/render.py";
         java.io.File file = new java.io.File(FILE_PATH);
         store.beginTransaction();
-        boolean debugLoop = true;
-//        while (debugLoop) {
-            PythonFile python = getScanner().scan(file, FILE_PATH, PythonScope.SRC);
-//        }
+        PythonFile python = getScanner().scan(file, FILE_PATH, PythonScope.SRC);
         store.commitTransaction();
     }
 

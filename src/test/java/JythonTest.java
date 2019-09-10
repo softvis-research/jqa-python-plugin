@@ -16,10 +16,10 @@ public class JythonTest {
 //        exampleFilePath = "src/test/resources/example/render.py";
 //        exampleFilePath = "src/test/resources/example/simple.py";
 
-        System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
-        System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
-        columnPrint("INT", "(depth...) Rule Name", "Python 3 Source Code", 0);
-        System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
+//        System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
+//        System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
+//        columnPrint("INT", "(depth...) Rule Name", "Python 3 Source Code", 0);
+//        System.out.println(ANSI_RED + "-----------------------------------------------------------------" + ANSI_RESET);
     }
     @Test
     public void testParse() throws IOException {

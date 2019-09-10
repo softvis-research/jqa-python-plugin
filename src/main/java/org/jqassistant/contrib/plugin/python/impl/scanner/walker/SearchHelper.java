@@ -10,7 +10,16 @@ import java.util.Optional;
 import java.util.Set;
 
 public class SearchHelper {
-
+    private ParseTree searchChildrenForStringText(Python3Parser.File_inputContext ctx, String searchString) {
+        final int childCount = ctx.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            ParseTree child = ctx.getChild(i);
+            if (child.getText().equals(searchString)) {
+                return child;
+            }
+        }
+        return null;
+    }
 
     public static String findNameToken(ParseTree ctx) {
         final int childCount = ctx.getChildCount();
@@ -41,7 +50,7 @@ public class SearchHelper {
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public static Optional<ContextEntity> findParentByRuleIndex(StoreHelper storeHelper, ParserRuleContext ctx, int parentRuleIndex) {

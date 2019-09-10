@@ -388,7 +388,6 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterImport_name(final Import_nameContext ctx) {
-        System.out.println("enterImport_name" +  ctx.getText());
         super.enterImport_name(ctx);
     }
 

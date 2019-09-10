@@ -43,12 +43,12 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
     @Override
     public PythonFile scan(FileResource item, String path, Scope scope, Scanner scanner) throws IOException {
         final ScannerContext scannerContext = scanner.getContext();
-        final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
-        final PythonPackage pythonPackage = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonPackage.class);
-        final PythonFile pythonFile = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonFile.class);
-        pythonPackage.getContains().add(pythonFile);
-
-        final StoreHelper storeHelper = new StoreHelper(pythonPackage, pythonFile, scannerContext);
+        if (scannerContext.peekOrDefault(StoreHelper.class, null) == null) {
+            final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
+            final PythonPackage pythonPackage = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonPackage.class);
+            scannerContext.push(StoreHelper.class, new StoreHelper(pythonPackage, scannerContext));
+        }
+        final StoreHelper storeHelper = scannerContext.peek(StoreHelper.class);
         final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, storeHelper);
 
         try (final InputStream inputStream = item.createStream()) {
@@ -61,9 +61,9 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
 
             ParseTreeWalker.DEFAULT.walk(new PythonSourceWalker(walkerHelper), tree);
         } catch (PythonSourceException pse) {
-            LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + pythonFile.getFileName());
+            LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + path);
         }
 
-        return pythonFile;
+        return storeHelper.getPythonFile();
     }
 }

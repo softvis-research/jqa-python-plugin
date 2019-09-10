@@ -2,7 +2,8 @@ package org.jqassistant.contrib.plugin.python.impl.scanner.walker;
 
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
@@ -18,33 +19,53 @@ import java.util.TreeMap;
  *
  * @author Kevin M. Shrestha
  */
-@AllArgsConstructor
 public class StoreHelper {
     private String fqn;
-    private PythonPackage packageDescriptor;
+    @Getter
+    private PythonPackage pythonPackage;
+    @Getter
+    @Setter
     private PythonFile pythonFile;
     private ScannerContext scannerContext;
     private Cache cache = new Cache();
 
-    public StoreHelper(final PythonPackage packageDescriptor,
-            final PythonFile pythonFile,
+    public StoreHelper(final PythonPackage pythonPackage,
             final ScannerContext scannerContext) {
-        this.packageDescriptor = packageDescriptor;
-        this.pythonFile = pythonFile;
+        this.pythonPackage = pythonPackage;
         this.scannerContext = scannerContext;
 
-        this.fqn = packageDescriptor.getFileName();
         RuleCache ruleCache = new RuleCache();
         ContextEntityCache contextEntities = new ContextEntityCache();
-        ContextEntity packageCE = new ContextEntity(null, packageDescriptor);
+        ContextEntity packageCE = new ContextEntity(null, pythonPackage);
         contextEntities.add(packageCE);
         ruleCache.put(RuleIndex.PACKAGE.getValue(), contextEntities);
 
+        this.pythonPackage.setFullQualifiedName(this.pythonPackage.getFileName());
+        this.fqn = this.pythonPackage.getFileName();
         cache.put(fqn, ruleCache);
     }
 
-    public <T extends Descriptor> T createAndCache(Class<T> fileClass, ParserRuleContext ctx) {
-        T storeObject = scannerContext.getStore().create(fileClass);
+    public void cacheFile(PythonFile pythonFile, ParserRuleContext ctx) {
+        int ruleIndex = ctx.getRuleIndex();
+
+        RuleCache ruleCache = cache.get(fqn);
+        if (!ruleCache.containsKey(ruleIndex)) {
+            ruleCache.put(ruleIndex, new ContextEntityCache());
+        }
+
+        ContextEntityCache contextEntityCache = ruleCache.get(ruleIndex);
+
+        contextEntityCache.add(new ContextEntity(ctx, pythonFile));
+    }
+
+    public <T extends Descriptor> T createAndCache(Class<T> fileClass, ParserRuleContext ctx, Descriptor additionalDescriptorType) {
+        T storeObject;
+        if (additionalDescriptorType == null) {
+            storeObject = scannerContext.getStore().create(fileClass);
+        } else {
+            storeObject = scannerContext.getStore().addDescriptorType(additionalDescriptorType, fileClass);
+        }
+
         int ruleIndex = ctx.getRuleIndex();
 
         RuleCache ruleCache = cache.get(fqn);

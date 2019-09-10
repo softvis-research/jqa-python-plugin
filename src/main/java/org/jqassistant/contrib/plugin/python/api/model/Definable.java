@@ -25,7 +25,7 @@ public interface Definable extends Python, Descriptor {
      */
     @Outgoing
     @Contains
-    Set<Class> getContainedClasses();
+    Set<PythonClass> getContainedClasses();
 
     /**
      * Return the declared methods.
