@@ -10,8 +10,6 @@ Next download the latest version from the release tab. Put the `jqa-python-plugi
  line tool.
 
 ```bash
-the plugin currently does not execute correctly when run by jqassistant-commandline, sorry! but this is how it may be used in the future:
-
 jqassistant-commandline-neo4jv3-1.6.0/bin/jqassistant.sh scan -f <file or directory path>
 ```
 
