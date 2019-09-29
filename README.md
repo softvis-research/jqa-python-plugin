@@ -31,4 +31,4 @@ mvn clean install
 
 ## Model
 
-![Neo4j model for the jQAssistant Jira plugin](./documents/model.png)
+![Neo4j model for the jQAssistant Jira plugin](./documents/model.PNG)
