@@ -7,6 +7,7 @@ import java.io.IOException;
 //import org.python.core.PyObject;
 //import org.python.util.PythonInterpreter;
 
+@Deprecated
 public class JythonTest {
     private String exampleFilePath;
 

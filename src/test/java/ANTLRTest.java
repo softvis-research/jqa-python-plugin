@@ -18,20 +18,21 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static junit.framework.TestCase.assertNotNull;
 
 public class ANTLRTest {
 
     private String exampleFilePath;
     private File_inputContext file_inputContext;
     private Python3Parser parser;
-    private boolean shouldPrint = true;
+    private boolean shouldPrint = false;
 
     @Before
     public void init() throws IOException {
 //        exampleFilePath = "src/test/resources/example/http_server.py";
 //        exampleFilePath = "src/test/resources/example/render.py";
-//        exampleFilePath = "src/test/resources/example/simple.py";
-        exampleFilePath = "../../youtube-dl/youtube_dl/downloader/http.py";
+        exampleFilePath = "src/test/resources/example/simple.py";
+//        exampleFilePath = "../../youtube-dl/youtube_dl/downloader/http.py";
 
         if (shouldPrint) {
             System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);
@@ -51,6 +52,7 @@ public class ANTLRTest {
         file_inputContext = parser.file_input();
 
         iteratePrettyPrint(file_inputContext, 0);
+        assertNotNull(file_inputContext);
     }
 
     @Test
@@ -104,6 +106,7 @@ public class ANTLRTest {
 
             }
         }, parser.file_input());
+        assertNotNull(parser.file_input());
     }
 
     private void iteratePrettyPrint(RuleContext context, int indentDepth) {
