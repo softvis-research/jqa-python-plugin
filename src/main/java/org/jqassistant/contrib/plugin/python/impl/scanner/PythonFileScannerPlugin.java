@@ -15,9 +15,10 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser.File_inputContext;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
+import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.PythonSourceWalker;
-import org.jqassistant.contrib.plugin.python.impl.scanner.walker.StoreHelper;
 import org.jqassistant.contrib.plugin.python.impl.scanner.walker.WalkerHelper;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,19 +37,21 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
     @Override
     public boolean accepts(FileResource item, String path, Scope scope) {
         LOGGER.debug("item, path, scope: " + item + ",\t" + path + ", \t" + scope);
-        return path.toLowerCase().endsWith(".py");
+        return path.toLowerCase().endsWith(PythonScope.FILE_EXTENSION);
     }
 
     @Override
     public PythonFile scan(FileResource item, String path, Scope scope, Scanner scanner) throws IOException {
         final ScannerContext scannerContext = scanner.getContext();
-        if (scannerContext.peekOrDefault(StoreHelper.class, null) == null) {
+        if (scannerContext.peekOrDefault(CacheManager.class, null) == null) {
             final FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
             final PythonPackage pythonPackage = scannerContext.getStore().addDescriptorType(fileDescriptor, PythonPackage.class);
-            scannerContext.push(StoreHelper.class, new StoreHelper(pythonPackage, scannerContext));
+            scannerContext.push(CacheManager.class, new CacheManager(pythonPackage, scannerContext, path));
         }
-        final StoreHelper storeHelper = scannerContext.peek(StoreHelper.class);
-        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, storeHelper);
+        final CacheManager cacheManager = scannerContext.peek(CacheManager.class);
+        cacheManager.setCurrentPath(cacheManager.getRootPath() + path);
+
+        final WalkerHelper walkerHelper = new WalkerHelper(scannerContext, cacheManager);
 
         try (final InputStream inputStream = item.createStream()) {
 
@@ -63,6 +66,6 @@ public class PythonFileScannerPlugin extends AbstractScannerPlugin<FileResource,
             LOGGER.warn(pse.getClass().getSimpleName() + " " + pse.getMessage() + " in " + path);
         }
 
-        return storeHelper.getPythonFile();
+        return cacheManager.getPythonFile();
     }
 }

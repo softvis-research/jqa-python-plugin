@@ -5,7 +5,7 @@ import com.buschmais.jqassistant.core.scanner.api.Scope;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractDirectoryScannerPlugin;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
 import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
-import org.jqassistant.contrib.plugin.python.impl.scanner.walker.StoreHelper;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +45,13 @@ public class PythonPackageScannerPlugin extends AbstractDirectoryScannerPlugin<P
 
     @Override
     protected void enterContainer(File container, PythonPackage pythonPackage, ScannerContext scannerContext) throws IOException {
-        if (scannerContext.peekOrDefault(StoreHelper.class, null) == null) {
-            scannerContext.push(StoreHelper.class, new StoreHelper(pythonPackage, scannerContext));
+        if (scannerContext.peekOrDefault(CacheManager.class, null) == null) {
+            scannerContext.push(CacheManager.class, new CacheManager(pythonPackage, scannerContext, container.getName()));
         }
     }
 
     @Override
     protected void leaveContainer(File container, PythonPackage containerDescriptor, ScannerContext scannerContext) throws IOException {
-        scannerContext.pop(StoreHelper.class);
+        scannerContext.pop(CacheManager.class);
     }
 }

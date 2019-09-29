@@ -16,7 +16,8 @@ public class PythonFileScannerIT extends AbstractPluginIT {
     @Test
     public void testScanPythonFile() {
 //        final String FILE_PATH = "src/test/resources/example/http_server.py";
-        final String FILE_PATH = "src/test/resources/example/render.py";
+//        final String FILE_PATH = "src/test/resources/example/render.py";
+        final String FILE_PATH = "../../youtube-dl/youtube_dl/aes.py";
         java.io.File file = new java.io.File(FILE_PATH);
         store.beginTransaction();
         PythonFile python = getScanner().scan(file, FILE_PATH, PythonScope.SRC);

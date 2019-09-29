@@ -8,6 +8,8 @@ import com.buschmais.jqassistant.core.scanner.api.Scope;
 public enum PythonScope implements Scope {
     SRC;
 
+    public static final String FILE_EXTENSION = ".py";
+
     @Override
     public String getPrefix() {
         return "python";

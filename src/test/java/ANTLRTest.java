@@ -24,7 +24,7 @@ public class ANTLRTest {
     private String exampleFilePath;
     private File_inputContext file_inputContext;
     private Python3Parser parser;
-    private boolean shouldPrint = false;
+    private boolean shouldPrint = true;
 
     @Before
     public void init() throws IOException {
@@ -46,7 +46,7 @@ public class ANTLRTest {
     }
 
     @Test
-    public void testParse(){
+    public void testParse() {
         file_inputContext = parser.file_input();
 
         iteratePrettyPrint(file_inputContext, 0);

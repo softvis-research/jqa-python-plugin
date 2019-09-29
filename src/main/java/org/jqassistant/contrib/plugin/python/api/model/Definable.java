@@ -18,6 +18,8 @@ public interface Definable extends Python, Descriptor {
     @Contains
     Object getParentObject();
 
+    void setParentObject(Object parentObject);
+
     /**
      * Return the declared inner classes.
      *
@@ -53,12 +55,4 @@ public interface Definable extends Python, Descriptor {
     @Outgoing
     @Defines
     List<Variable> getDeclaredVariables();
-
-
-    @Outgoing
-    List<Imports> getDependencies();
-
-    @Incoming
-    List<Imports> getDependents();
-
 }

@@ -17,11 +17,12 @@ public class PythonPackageScannerIT extends AbstractPluginIT {
 
     @Test
     public void testScanPythonDirectory() {
-        final String FILE_DIRECTORY_PATH = "src/test/resources/example/";
+//        final String FILE_DIRECTORY_PATH = "src/test/resources/example/";
+//        final String FILE_DIRECTORY_PATH = "../../youtube-dl/youtube_dl/";
+        final String FILE_DIRECTORY_PATH = "../../youtube-dl/youtube_dl/downloader";
         File directory = new File(FILE_DIRECTORY_PATH);
         store.beginTransaction();
         PythonPackage pythonSourceDirectory = getScanner().scan(directory, FILE_DIRECTORY_PATH, PythonScope.SRC);
         store.commitTransaction();
     }
-
 }

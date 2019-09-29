@@ -9,37 +9,69 @@ import org.jqassistant.contrib.plugin.python.api.model.Parameter;
 import org.jqassistant.contrib.plugin.python.api.model.PythonClass;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
+import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
 import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.cache.CacheManager;
+import org.jqassistant.contrib.plugin.python.impl.scanner.walker.cache.ContextEntity;
 
 import java.util.Optional;
 
 @AllArgsConstructor
 public class WalkerHelper {
     private ScannerContext scannerContext;
-    private StoreHelper storeHelper;
+    private CacheManager cacheManager;
 
     public void createFile(Python3Parser.File_inputContext ctx) {
         FileDescriptor fileDescriptor = scannerContext.getCurrentDescriptor();
-        PythonFile pythonFile = storeHelper.createAndCache(PythonFile.class, ctx, fileDescriptor);
+        String nameToken = fileDescriptor.getFileName();
+        String nameNoSlash = nameToken.replace("/", "");
 
-        storeHelper.cacheFile(pythonFile, ctx);
-        pythonFile.setFullQualifiedName(storeHelper.getPythonPackage().getFileName());
-        pythonFile.setName(fileDescriptor.getFileName());
-        storeHelper.getPythonPackage().getContains().add(pythonFile);
+        PythonFile pythonFile = cacheManager.getOrphanFromCacheOrCreate(nameNoSlash, ctx, fileDescriptor);
 
-        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.PACKAGE);
+        pythonFile.setFullQualifiedName(cacheManager.getPythonPackage().getFileName() + nameToken);
+        pythonFile.setName(nameNoSlash);
+        pythonFile.setFileName(nameNoSlash);
+        cacheManager.getPythonPackage().getContains().add(pythonFile);
+
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInAllCache(cacheManager, ctx, RuleIndex.PACKAGE);
         if (parentInCache.isPresent()) {
             Optional<PythonPackage> opt = parentInCache.get().getPythonPackage();
             opt.ifPresent(parent -> parent.getContains().add(pythonFile));
         }
 
-        storeHelper.setPythonFile(pythonFile);
+        cacheManager.setPythonFile(pythonFile);
     }
 
-    public void createParameters(final Python3Parser.ParametersContext ctx) {
-        Parameter object = storeHelper.createAndCache(Parameter.class, ctx, null);
-        object.setName(SearchHelper.findNameToken(ctx));
-        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.METHOD);
+    public void createImport(Python3Parser.Import_stmtContext ctx) {
+        String nameToken = SearchHelper.findToken(ctx, Python3Parser.NAME);
+        String subString = nameToken;
+        int depth = 0;
+        while (ctx.getText().split(subString)[0].endsWith(".")) {
+            subString = "." + subString;
+            depth++;
+        }
+        PythonFile object = cacheManager.getFileOrOrphanFromCacheOrCreate(nameToken, null, null);
+        while (nameToken.startsWith(".")) {
+            nameToken = nameToken.substring(1);
+        }
+        object.setName(nameToken);
+        object.setFileName(nameToken + PythonScope.FILE_EXTENSION);
+
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInThisCache(cacheManager.getCurrentCache(), ctx, RuleIndex.ANY);
+        if (parentInCache.isPresent()) {
+            Optional<PythonFile> opt = parentInCache.get().getPythonFile();
+//            opt.ifPresent(parent -> object.getDependents().add(parent));
+            opt.ifPresent(parent -> parent.getDependencies().add(object));
+        } else {
+            System.out.println("parent not found");
+        }
+    }
+
+    public void createParameters(final Python3Parser.TfpdefContext ctx) {
+        String name = SearchHelper.findToken(ctx, Python3Parser.NAME);
+        Parameter object = cacheManager.createAndCache(name, Parameter.class, ctx, null);
+        object.setName(name);
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInThisCache(cacheManager.getCurrentCache(), ctx, RuleIndex.METHOD);
         if (parentInCache.isPresent()) {
             Optional<Method> opt = parentInCache.get().getMethod();
             opt.ifPresent(parent -> parent.getParameters().add(object));
@@ -49,9 +81,10 @@ public class WalkerHelper {
     }
 
     public void createFunction(final Python3Parser.FuncdefContext ctx) {
-        Method object = storeHelper.createAndCache(Method.class, ctx, null);
-        object.setName(SearchHelper.findNameToken(ctx));
-        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
+        String name = SearchHelper.findToken(ctx, Python3Parser.NAME);
+        Method object = cacheManager.createAndCache(name, Method.class, ctx, null);
+        object.setName(name);
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInThisCache(cacheManager.getCurrentCache(), ctx, RuleIndex.ANY);
         if (parentInCache.isPresent()) {
             Optional<PythonFile> opt = parentInCache.get().getPythonFile();
             opt.ifPresent(parent -> parent.getDefinedMethods().add(object));
@@ -63,19 +96,16 @@ public class WalkerHelper {
         }
     }
 
-    public void createImport(Python3Parser.Import_stmtContext ctx) {
-//        PythonSourceFile object = storeHelper.createAndCache(PythonSourceFile.class, ctx, null);
-//        pythonSourceFile.getImports().add(object); //TODO: find correct import type
-    }
-
     public void createClass(Python3Parser.ClassdefContext ctx) {
-        PythonClass object = storeHelper.createAndCache(PythonClass.class, ctx, null);
-        object.setName(SearchHelper.findNameToken(ctx));
+        String name = SearchHelper.findToken(ctx, Python3Parser.NAME);
+        PythonClass object = cacheManager.createAndCache(name, PythonClass.class, ctx, null);
+        object.setName(name);
 
-        Optional<ContextEntity> parentInCache = SearchHelper.findParentInCache(storeHelper, ctx, RuleIndex.ANY);
+        Optional<ContextEntity> parentInCache = SearchHelper.findParentInThisCache(cacheManager.getCurrentCache(), ctx, RuleIndex.ANY);
         if (parentInCache.isPresent()) {
             Optional<PythonFile> opt = parentInCache.get().getPythonFile();
-            opt.ifPresent(parent -> parent.getContainedClasses().add(object));
+//            opt.ifPresent(object::setParentObject);
+//            opt.ifPresent(parent -> parent.getContainedClasses().add(object));
             opt.ifPresent(parent -> object.setSourceFileName(parent.getFileName()));
         } else {
             System.out.println("parent not found");

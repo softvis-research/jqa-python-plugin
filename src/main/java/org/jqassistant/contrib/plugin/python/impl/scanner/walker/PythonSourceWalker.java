@@ -178,7 +178,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterParameters(final ParametersContext ctx) {
-        walkerHelper.createParameters(ctx);
+//        walkerHelper.createParameters(ctx);
     }
 
     @Override
@@ -198,7 +198,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterTfpdef(final TfpdefContext ctx) {
-        super.enterTfpdef(ctx);
+        walkerHelper.createParameters(ctx);
     }
 
     @Override

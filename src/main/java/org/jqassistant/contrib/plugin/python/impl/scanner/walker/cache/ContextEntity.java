@@ -1,8 +1,9 @@
-package org.jqassistant.contrib.plugin.python.impl.scanner.walker;
+package org.jqassistant.contrib.plugin.python.impl.scanner.walker.cache;
 
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.jqassistant.contrib.plugin.python.api.model.Method;
 import org.jqassistant.contrib.plugin.python.api.model.Parameter;
@@ -14,10 +15,11 @@ import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Getter
+@Setter
 public class ContextEntity {
-    @Getter
-    final ParserRuleContext context;
-    @Getter
+    final String name;
+    ParserRuleContext context;
     final Descriptor entity;
 
     public int getRuleIndex() {
@@ -36,6 +38,9 @@ public class ContextEntity {
 //        }
 //    }
 
+    public boolean isTypeOfRuleIndex(int ruleIndex) {
+        return this.context.getRuleIndex() == ruleIndex;
+    }
 
     public boolean isPythonPackage() {
         return this.context.getRuleIndex() == RuleIndex.PACKAGE.getValue();

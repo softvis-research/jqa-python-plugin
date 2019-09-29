@@ -4,6 +4,7 @@ import org.jqassistant.contrib.plugin.python.antlr4.Python3Parser;
 
 public enum RuleIndex {
     ANY              (null                             ),
+    ORPHAN           (-2                               ),
     PACKAGE          (-1                               ),
     FILE             (Python3Parser.RULE_file_input    ),
     METHOD           (Python3Parser.RULE_funcdef       ),

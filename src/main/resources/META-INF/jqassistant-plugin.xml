@@ -5,7 +5,6 @@
     <model>
         <class>org.jqassistant.contrib.plugin.python.api.model.PythonClass</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Constructor</class>
-        <class>org.jqassistant.contrib.plugin.python.api.model.Imports</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Method</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Definable</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Parameter</class>
