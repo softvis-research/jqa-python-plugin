@@ -29,8 +29,9 @@ public class ANTLRTest {
     @Before
     public void init() throws IOException {
 //        exampleFilePath = "src/test/resources/example/http_server.py";
-        exampleFilePath = "src/test/resources/example/render.py";
+//        exampleFilePath = "src/test/resources/example/render.py";
 //        exampleFilePath = "src/test/resources/example/simple.py";
+        exampleFilePath = "../../youtube-dl/youtube_dl/downloader/http.py";
 
         if (shouldPrint) {
             System.out.println(ANSI_GREEN + "Source File: " + ANSI_RESET + exampleFilePath);

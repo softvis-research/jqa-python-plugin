@@ -9,6 +9,7 @@
         <class>org.jqassistant.contrib.plugin.python.api.model.Definable</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Parameter</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Python</class>
+        <class>org.jqassistant.contrib.plugin.python.api.model.PythonException</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.PythonFile</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.PythonPackage</class>
         <class>org.jqassistant.contrib.plugin.python.api.model.Signature</class>

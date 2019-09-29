@@ -38,8 +38,8 @@ public class ContextEntity {
 //        }
 //    }
 
-    public boolean isTypeOfRuleIndex(int ruleIndex) {
-        return this.context.getRuleIndex() == ruleIndex;
+    public boolean isTypeOfRuleIndex(RuleIndex ruleIndex) {
+        return this.context.getRuleIndex() == ruleIndex.getValue();
     }
 
     public boolean isPythonPackage() {

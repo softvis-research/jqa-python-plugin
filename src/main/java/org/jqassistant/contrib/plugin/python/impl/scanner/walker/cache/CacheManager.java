@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.commons.lang.StringUtils;
 import org.jqassistant.contrib.plugin.python.api.model.PythonFile;
 import org.jqassistant.contrib.plugin.python.api.model.PythonPackage;
-import org.jqassistant.contrib.plugin.python.api.scanner.PythonScope;
 import org.jqassistant.contrib.plugin.python.impl.scanner.RuleIndex;
 
 /**
@@ -50,8 +49,53 @@ public class CacheManager {
         cacheObject(name, ce.getEntity(), ctx, currentPath);
     }
 
-    public PythonFile getFileOrOrphanFromCacheOrCreate(String name, ParserRuleContext ctx, Descriptor addDescriptorType) {
+    public <T extends Descriptor> T getRuleOrOrphanFromCacheOrCreate(String name, Class<T> fileClass, ParserRuleContext ctx, Descriptor addDescriptorType, RuleIndex ruleIndex) {
+        for (RuleIndexCache currentCache : cache.values()) {
+            if (currentCache.containsKey(ruleIndex.getValue())) {
+                for (ContextEntity ce : currentCache.get(ruleIndex.getValue())) {
+                    if (ce.getName().contains(name)) {
+                        if (ce.isTypeOfRuleIndex(ruleIndex)) {
+                            T descriptor = tryCast(ce, fileClass);
+                            if (fileClass.isInstance(descriptor)) {
+                                return descriptor;
+                            }
+                        }
+                    }
+                }
+            }
+            if (currentCache.containsKey(RuleIndex.ORPHAN.getValue())) {
+                for (ContextEntity ce : currentCache.get(RuleIndex.ORPHAN.getValue())) {
+                    if (ce.getName().contains(name)) {
+                        if (ctx != null) {
+                            giveOrphanAHome(name, ce, ctx);
+                            currentCache.remove(ce);
+                        }
+                        T descriptor = tryCast(ce, fileClass);
+                        if (fileClass.isInstance(descriptor)) {
+                            return descriptor;
+                        }
+                    }
+                }
+            }
+        }
 
+        return createAndCache(name, fileClass, ctx, addDescriptorType);
+    }
+
+    private <T extends Descriptor> T tryCast(final ContextEntity ce, Class<T> fileClass) {
+        T testClass = null;
+        try {
+            testClass = (T) ce.getEntity();
+            return testClass;
+        } catch (ClassCastException e) {
+            //skip
+            //            System.out.println(e);
+        }
+        return null;
+    }
+
+    @Deprecated
+    public PythonFile getFileOrOrphanFromCacheOrCreate(String name, ParserRuleContext ctx, Descriptor addDescriptorType) {
         for (RuleIndexCache currentCache : cache.values()) {
             if (currentCache.containsKey(RuleIndex.FILE.getValue())) {
                 for (ContextEntity ce : currentCache.get(RuleIndex.FILE.getValue())) {
@@ -76,8 +120,8 @@ public class CacheManager {
         return createAndCache(name, PythonFile.class, ctx, addDescriptorType);
     }
 
-    public PythonFile getOrphanFromCacheOrCreate(String name, ParserRuleContext ctx, Descriptor addDescriptorType) {
-
+    @Deprecated
+    public PythonFile getOrphanFileFromCacheOrCreate(String name, ParserRuleContext ctx, Descriptor addDescriptorType) {
         for (RuleIndexCache currentCache : cache.values()) {
             if (currentCache.containsKey(RuleIndex.ORPHAN.getValue())) {
                 for (ContextEntity ce : currentCache.get(RuleIndex.ORPHAN.getValue())) {
@@ -117,9 +161,6 @@ public class CacheManager {
         if (ctx == null) {
             ruleIndex = RuleIndex.ORPHAN.getValue();
             fqn = "ORPHAN";
-            if (!name.endsWith(PythonScope.FILE_EXTENSION)) {
-                name = name + PythonScope.FILE_EXTENSION;
-            }
         } else {
             ruleIndex = ctx.getRuleIndex();
         }
@@ -132,6 +173,7 @@ public class CacheManager {
         if (!cache.containsKey(fqn)) {
             cache.put(fqn, new RuleIndexCache());
         }
+        name = name.replace(".py", "");
 
         RuleIndexCache ruleIndexCache = cache.get(fqn);
         if (!ruleIndexCache.containsKey(ruleIndex)) {

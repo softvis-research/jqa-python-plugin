@@ -33,7 +33,7 @@ public interface Method extends Python, Definable, NamedDescriptor, Signature {
      * @return The declared throwables.
      */
     @Relation("RAISES")
-    List<Exception> getDeclaredThrowables();
+    List<PythonException> getDeclaredThrowables();
 
     /**
      * Return all read accesses to fields this method performs.

@@ -10,7 +10,7 @@
 
     <groupId>org.jqassistant.contrib.plugin</groupId>
     <artifactId>jqa-python-plugin</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
     <name>jQAssistant Python Plugin</name>
     <description>A jQAssistant plugin to scan and to analyze Python source code.</description>

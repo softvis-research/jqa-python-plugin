@@ -26,44 +26,27 @@ class SearchHelper {
         return null;
     }
 
-    public static String findNameToken(ParseTree ctx) {
-        final int childCount = ctx.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            ParseTree object = ctx.getChild(i);
-            if (object instanceof TerminalNodeImpl) {
-                TerminalNodeImpl child = (TerminalNodeImpl) object;
-                if (child.getSymbol().getType() == Python3Parser.NAME) {
-                    return child.getText();
-                }
-            } else {
-                return findNameToken(object);
-            }
-        }
-        String backupName = ctx.getChild(1).getText();
-        return backupName.isEmpty() ? backupName : "null"; //if symbol 40 is not found
-    }
-
-    static String findToken(ParseTree ctx, final int typeIndex) {
+    static String findToken(ParseTree ctx, final int typeIndex, int depth) {
         final int childCount = ctx.getChildCount();
         for (int i = 0; i < childCount; i++) {
             Optional<TerminalNodeImpl> node = getTerminalNode(ctx, i);
             if (node.isPresent()) {
                 if (checkForNodeType(node, typeIndex)) {
-                    StringBuilder token = new StringBuilder();
-//                    int prependingDotsIndex = 1;
-//                    while (checkForNodeType(getTerminalNode(ctx, i - prependingDotsIndex), Python3Parser.DOT)) {
-//                        token.append(".");
-//                        prependingDotsIndex++;
-//                    }
-                    token.append(node.get().getText());
-                    return token.toString();
+                    if (depth > 0) {
+                        depth--;
+                    } else {
+                        return node.get().getText();
+                    }
                 }
             } else {
-                return findToken(ctx.getChild(i), typeIndex);
+                return findToken(ctx.getChild(i), typeIndex, depth);
             }
         }
-        String backupName = ctx.getChild(1).getText();
-        return backupName.isEmpty() ? backupName : "null"; //if symbol 40 is not found
+        String backupName = "";
+        if (childCount > 1) {
+            backupName = ctx.getChild(1).getText();
+        }
+        return backupName.isEmpty() ? backupName : "null"; //if symbol defined by typeIndex is not found
     }
 
     private static Optional<TerminalNodeImpl> getTerminalNode(final ParseTree ctx, final int i) {

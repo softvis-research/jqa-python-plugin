@@ -258,7 +258,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterExpr_stmt(final Expr_stmtContext ctx) {
-        super.enterExpr_stmt(ctx);
+//        walkerHelper.createExprStatement(ctx);
     }
 
     @Override
@@ -568,7 +568,7 @@ public class PythonSourceWalker extends Python3BaseListener {
 
     @Override
     public void enterExcept_clause(final Except_clauseContext ctx) {
-        super.enterExcept_clause(ctx);
+        walkerHelper.createException(ctx);
     }
 
     @Override
