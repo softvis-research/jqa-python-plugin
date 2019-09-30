@@ -74,6 +74,7 @@ class SearchHelper {
         return Optional.empty();
     }
 
+    //TODO: check tree search strategy and parent traverse strategy
     static Optional<ContextEntity> findParentInThisCache(RuleIndexCache currentCache, ParserRuleContext ctx,
             RuleIndex parentRuleIndex) {
         if (currentCache == null) {

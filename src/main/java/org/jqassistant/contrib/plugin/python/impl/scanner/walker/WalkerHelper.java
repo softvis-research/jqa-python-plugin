@@ -140,10 +140,21 @@ public class WalkerHelper {
     }
 
     public void createExprStatement(final Expr_stmtContext ctx) {
-        String name = SearchHelper.findToken(ctx, Python3Parser.NAME, 0);
-        if (!name.isEmpty() && !name.equals("null")) {
-            Variable object = cacheManager.getRuleOrOrphanFromCacheOrCreate(name, Variable.class, ctx, null, RuleIndex.EXPR_STATEMENT);
-            object.setName(name);
+        if (ctx.getChildCount() == 3 && ctx.getChild(1).getText().equals("=")) {
+            String nameLeft = SearchHelper.findToken(ctx.getChild(0), Python3Parser.NAME, 0);
+            String nameRight = SearchHelper.findToken(ctx.getChild(2), Python3Parser.NAME, 0);
+
+            Optional<ContextEntity> parentInCache = SearchHelper.findParentInThisCache(cacheManager.getCurrentCache(), ctx, RuleIndex.ANY);
+            if (!nameLeft.isEmpty() && !nameLeft.equals("null") && !nameRight.isEmpty() && !nameRight.equals("null")) {
+                Variable object = cacheManager.getRuleOrOrphanFromCacheOrCreate(nameLeft, Variable.class, ctx, null, RuleIndex.EXPR_STATEMENT);
+                object.setName(nameLeft);
+                if (parentInCache.isPresent()) {
+                    Optional<Method> opt = parentInCache.get().getMethod();
+                    opt.ifPresent(parent -> object.getWrittenBy().add(parent));
+                } else {
+                    System.out.println("parent not found: " + ctx.getText());
+                }
+            }
         }
     }
 }
